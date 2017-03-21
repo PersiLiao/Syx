@@ -432,7 +432,7 @@ zend_class_entry *syx_dispatcher_get_action(zend_string *app_dir, syx_controller
 /* }}} */
 	{
 		syx_trigger_error(SYX_ERR_NOTFOUND_ACTION,
-				"There is no method %s%s in %s/%s", ZSTR_VAL(action), "Action", module, ZSTR_VAL(Z_OBJCE_P(controller)->name));
+				"There is no method %s%s in %s", ZSTR_VAL(action), "Action", ZSTR_VAL(Z_OBJCE_P(controller)->name));
 	}
 
 	return NULL;
