@@ -148,8 +148,9 @@ The view script for default controller and default action is in the application/
   http://www.yourhostname.com/
 
 ## Todo list
-1.Single module
-2.Integrated swoole
+
+* Single module
+* Integrated swoole
 
 
 ## QQ Group
