@@ -1,0 +1,19 @@
+// $Id: config.w32 765 2010-10-21 13:04:03Z huixinchen $
+// vim:ft=javascript
+
+ARG_ENABLE("syx", "enable syx support", "no");
+
+if (PHP_SYX == "yes") {
+
+	EXTENSION("syx", "syx.c syx_application.c syx_bootstrap.c syx_dispatcher.c syx_exception.c syx_config.c  syx_request.c syx_response.c syx_view.c syx_controller.c syx_action.c syx_router.c syx_loader.c syx_registry.c syx_plugin.c syx_session.c");
+
+	ADD_FLAG("CFLAGS_SYX", "/I " + configure_module_dirname);
+
+	ADD_SOURCES(configure_module_dirname + "\\configs", "syx_config_ini.c syx_config_simple.c", "syx");
+	ADD_SOURCES(configure_module_dirname + "\\requests", "syx_request_http.c syx_request_simple.c", "syx");
+	ADD_SOURCES(configure_module_dirname + "\\responses", "syx_response_http.c syx_response_cli.c", "syx");
+	ADD_SOURCES(configure_module_dirname + "\\views", "syx_view_interface.c syx_view_simple.c", "syx");
+	ADD_SOURCES(configure_module_dirname + "\\routes", "syx_route_interface.c syx_route_static.c syx_route_simple.c syx_route_supervar.c syx_route_regex.c syx_route_rewrite.c syx_route_map.c", "syx");
+
+    AC_DEFINE("HAVE_SYX", 1, "Have Syx Support");
+}
