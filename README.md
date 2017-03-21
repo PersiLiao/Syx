@@ -130,7 +130,7 @@ class Index extends Syx\ControllerAbstract {
 
 ```
 
-###view script
+### view script
 The view script for default controller and default action is in the application/index/view/index/index.html, Syx provides a simple view engineer called "Syx\View\Simple", which supported the view template written by PHP.
 
 ```php
