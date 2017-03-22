@@ -277,21 +277,21 @@ zend_class_entry *syx_dispatcher_get_controller(zend_string *app_dir, zend_strin
 		if ((ce = zend_hash_find_ptr(EG(class_table), class_lowercase)) == NULL) {
 			if (!syx_internal_autoload(ZSTR_VAL(controller), ZSTR_LEN(controller), &directory)) {
 				syx_trigger_error(SYX_ERR_NOTFOUND_CONTROLLER,
-						"syx_dispatcher_get_controller Failed opening controller script %s: %s", directory, strerror(errno));
+						"Failed opening controller script %s: %s", directory, strerror(errno));
 				zend_string_release(class);
 				zend_string_release(class_lowercase);
 				efree(directory);
 				return NULL;
 			} else if ((ce = zend_hash_find_ptr(EG(class_table), class_lowercase)) == NULL)  {
 				syx_trigger_error(SYX_ERR_AUTOLOAD_FAILED,
-						"syx_dispatcher_get_controller Could not find class %s in controller script %s", ZSTR_VAL(class), directory);
+						"Could not find class %s in controller script %s", ZSTR_VAL(class), directory);
 				zend_string_release(class);
 				zend_string_release(class_lowercase);
 				efree(directory);
 				return 0;
 			} else if (!instanceof_function(ce, syx_controller_ce)) {
 				syx_trigger_error(SYX_ERR_TYPE_ERROR,
-						"syx_dispatcher_get_controller Controller must be an instance of %s", ZSTR_VAL(syx_controller_ce->name));
+						"Controller must be an instance of %s", ZSTR_VAL(syx_controller_ce->name));
 				zend_string_release(class);
 				zend_string_release(class_lowercase);
 				efree(directory);
