@@ -1032,6 +1032,15 @@ PHP_METHOD(syx_dispatcher, getRouter) {
 }
 /* }}} */
 
+/** {{{ proto public Syx_Dispatcher::getView()
+*/
+PHP_METHOD(syx_dispatcher, getView) {
+    syx_view_t *view = zend_read_property(syx_dispatcher_ce,
+                getThis(), ZEND_STRL(SYX_DISPATCHER_PROPERTY_NAME_VIEW), 1, NULL);
+        RETURN_ZVAL(view, 1, 0);
+}
+/* }}} */
+
 /** {{{ proto public Syx_Dispatcher::getRequest(void)
 */
 PHP_METHOD(syx_dispatcher, getRequest) {
@@ -1149,15 +1158,13 @@ PHP_METHOD(syx_dispatcher, setView) {
 		return;
 	}
 
-	if (IS_OBJECT == Z_TYPE_P(view)
-			&& instanceof_function(Z_OBJCE_P(view), syx_view_interface_ce)) {
-		zend_update_property(syx_dispatcher_ce, self, ZEND_STRL(SYX_DISPATCHER_PROPERTY_NAME_VIEW), view);
-		RETURN_ZVAL(self, 1, 0);
-	}
+	zend_update_property(syx_dispatcher_ce, self, ZEND_STRL(SYX_DISPATCHER_PROPERTY_NAME_VIEW), view);
+	RETURN_ZVAL(self, 1, 0);
 
-	RETURN_FALSE;
 }
 /* }}} */
+
+
 
 /** {{{ proto public Syx_Dispatcher::setDefaultModule(string $name)
 */
@@ -1243,6 +1250,7 @@ zend_function_entry syx_dispatcher_methods[] = {
 	PHP_ME(syx_dispatcher, setRequest,			syx_dispatcher_setrequest_arginfo, 	ZEND_ACC_PUBLIC)
 	PHP_ME(syx_dispatcher, getApplication,			syx_dispatcher_void_arginfo, 		ZEND_ACC_PUBLIC)
 	PHP_ME(syx_dispatcher, getRouter,			syx_dispatcher_void_arginfo, 		ZEND_ACC_PUBLIC)
+	PHP_ME(syx_dispatcher, getView,           syx_dispatcher_void_arginfo,        ZEND_ACC_PUBLIC)
 	PHP_ME(syx_dispatcher, getRequest,			syx_dispatcher_void_arginfo, 		ZEND_ACC_PUBLIC)
 	PHP_ME(syx_dispatcher, setErrorHandler,			syx_dispatcher_seterrhdler_arginfo, 	ZEND_ACC_PUBLIC)
 	PHP_ME(syx_dispatcher, setDefaultModule,		syx_dispatcher_setmodule_arginfo, 	ZEND_ACC_PUBLIC)
