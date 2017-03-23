@@ -1145,7 +1145,7 @@ PHP_METHOD(syx_dispatcher, setView) {
 	syx_view_t		*view;
 	syx_dispatcher_t 	*self = getThis();
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS(), "z", &view) == FAILURE) {
+	if (zend_parse_parameters(ZEND_NUM_ARGS(), "O", &view, syx_view_interface_ce) == FAILURE) {
 		return;
 	}
 
