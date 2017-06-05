@@ -277,8 +277,8 @@ SYX_STARTUP_FUNCTION(request_http){
 	SYX_INIT_CLASS_ENTRY(ce, "Syx\\Request\\Http", syx_request_http_methods);
 	syx_request_http_ce = zend_register_internal_class_ex(&ce, syx_request_ce);
 
-	zend_declare_class_constant_string(syx_request_ce, ZEND_STRL("SCHEME_HTTP"), "http");
-	zend_declare_class_constant_string(syx_request_ce, ZEND_STRL("SCHEME_HTTPS"), "https");
+	zend_declare_class_constant_string(syx_request_http_ce, ZEND_STRL("SCHEME_HTTP"), "http");
+	zend_declare_class_constant_string(syx_request_http_ce, ZEND_STRL("SCHEME_HTTPS"), "https");
 
 	return SUCCESS;
 }
