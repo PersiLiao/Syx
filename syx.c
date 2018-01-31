@@ -213,6 +213,7 @@ PHP_MINFO_FUNCTION(syx)
 
 	php_info_print_table_header(2, "Syx support", "enabled");
 	php_info_print_table_row(2, "Version", PHP_SYX_VERSION);
+	php_info_print_table_row(2, "Author", "PersiLiao");
 	php_info_print_table_row(2, "Supports", SYX_SUPPORT_URL);
 	php_info_print_table_row(2, "Based", "Yaf 3.0.4");
 	php_info_print_table_end();

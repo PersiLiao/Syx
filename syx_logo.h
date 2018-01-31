@@ -50,7 +50,7 @@
 "SIXQYDf+bjp//jzPATneF92/f39yol+r8h/ztexGHYdU2gAAAABJRU5ErkJggg=="
 
 #define SYX_LOGO_DATA      "data:image/png;base64," SYX_LOGO_BASE64
-#define SYX_SUPPORT_URL	   "https://github.com/ipersi/Syx"
+#define SYX_SUPPORT_URL	   "https://github.com/PersiLiao/Syx"
 #define SYX_LOGO_IMG       "<a href=" SYX_SUPPORT_URL "> \
 						   <img src=\"" SYX_LOGO_DATA "\" alt=\"Syx logo\" /></a>\n"
 
