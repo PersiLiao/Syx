@@ -1253,7 +1253,7 @@ PHP_METHOD(syx_dispatcher, __clone) {
 */
 zend_function_entry syx_dispatcher_methods[] = {
 	PHP_ME(syx_dispatcher, __construct, 			NULL, 					ZEND_ACC_PRIVATE | ZEND_ACC_CTOR)
-	PHP_ME(syx_dispatcher, __clone,				NULL, 					ZEND_ACC_PRIVATE | ZEND_ACC_CLONE)
+	PHP_ME(syx_dispatcher, __clone,				NULL, 					ZEND_ACC_PRIVATE)
 	PHP_ME(syx_dispatcher, __sleep,				NULL, 					ZEND_ACC_PRIVATE)
 	PHP_ME(syx_dispatcher, __wakeup,			NULL, 					ZEND_ACC_PRIVATE)
 	PHP_ME(syx_dispatcher, enableView,			syx_dispatcher_void_arginfo,  		ZEND_ACC_PUBLIC)

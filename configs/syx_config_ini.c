@@ -31,7 +31,7 @@
 
 zend_class_entry *syx_config_ini_ce;
 
-#ifdef HAVE_SPL
+#if defined(HAVE_SPL) && PHP_VERSION_ID < 70200
 extern PHPAPI zend_class_entry *spl_ce_Countable;
 #endif
 
@@ -654,10 +654,10 @@ SYX_STARTUP_FUNCTION(config_ini) {
 	SYX_INIT_CLASS_ENTRY(ce, "Syx\\Config\\Ini", syx_config_ini_methods);
 	syx_config_ini_ce = zend_register_internal_class_ex(&ce, syx_config_ce);
 
-#ifdef HAVE_SPL
+#if defined(HAVE_SPL) && PHP_VERSION_ID < 70200
 	zend_class_implements(syx_config_ini_ce, 3, zend_ce_iterator, zend_ce_arrayaccess, spl_ce_Countable);
-#else
-	zend_class_implements(syx_config_ini_ce, 2, zend_ce_iterator, zend_ce_arrayaccess);
+#elif PHP_VERSION_ID >= 70200
+	zend_class_implements(syx_config_ini_ce, 3, zend_ce_iterator, zend_ce_arrayaccess, zend_ce_countable);
 #endif
 
 	syx_config_ini_ce->ce_flags |= ZEND_ACC_FINAL;

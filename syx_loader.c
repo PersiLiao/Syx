@@ -711,7 +711,7 @@ PHP_FUNCTION(syx_override_spl_autoload) {
 */
 zend_function_entry syx_loader_methods[] = {
 	PHP_ME(syx_loader, __construct, syx_loader_void_arginfo, ZEND_ACC_PRIVATE|ZEND_ACC_CTOR)
-	PHP_ME(syx_loader, __clone, NULL, ZEND_ACC_PRIVATE|ZEND_ACC_CLONE)
+	PHP_ME(syx_loader, __clone, NULL, ZEND_ACC_PRIVATE)
 	PHP_ME(syx_loader, __sleep, NULL, ZEND_ACC_PRIVATE)
 	PHP_ME(syx_loader, __wakeup, NULL, ZEND_ACC_PRIVATE)
 	PHP_ME(syx_loader, autoload, syx_loader_autoloader_arginfo, ZEND_ACC_PUBLIC)

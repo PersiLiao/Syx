@@ -28,7 +28,7 @@
 
 zend_class_entry *syx_session_ce;
 
-#ifdef HAVE_SPL
+#if defined(HAVE_SPL) && PHP_VERSION_ID < 70200
 extern PHPAPI zend_class_entry *spl_ce_Countable;
 #endif
 
@@ -320,7 +320,7 @@ PHP_METHOD(syx_session, valid) {
 */
 zend_function_entry syx_session_methods[] = {
 	PHP_ME(syx_session, __construct, NULL, ZEND_ACC_CTOR|ZEND_ACC_PRIVATE)
-	PHP_ME(syx_session, __clone, NULL, ZEND_ACC_CLONE|ZEND_ACC_PRIVATE)
+	PHP_ME(syx_session, __clone, NULL, ZEND_ACC_PRIVATE)
 	PHP_ME(syx_session, __sleep, NULL, ZEND_ACC_PRIVATE)
 	PHP_ME(syx_session, __wakeup, NULL, ZEND_ACC_PRIVATE)
 	PHP_ME(syx_session, getInstance, syx_session_void_arginfo, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
@@ -358,10 +358,10 @@ SYX_STARTUP_FUNCTION(session) {
 	syx_session_ce = zend_register_internal_class_ex(&ce, NULL);
 	syx_session_ce->ce_flags |= ZEND_ACC_FINAL;
 
-#ifdef HAVE_SPL
+#if defined(HAVE_SPL) && PHP_VERSION_ID < 70200
 	zend_class_implements(syx_session_ce, 3, zend_ce_iterator, zend_ce_arrayaccess, spl_ce_Countable);
-#else
-	zend_class_implements(syx_session_ce, 2, zend_ce_iterator, zend_ce_arrayaccess);
+#elif PHP_VERSION_ID >= 70200
+	zend_class_implements(syx_session_ce, 3, zend_ce_iterator, zend_ce_arrayaccess, zend_ce_countable);
 #endif
 
 	zend_declare_property_null(syx_session_ce, ZEND_STRL(SYX_SESSION_PROPERTY_NAME_INSTANCE), ZEND_ACC_PROTECTED|ZEND_ACC_STATIC);

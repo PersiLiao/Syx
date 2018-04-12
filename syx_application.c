@@ -658,7 +658,7 @@ zend_function_entry syx_application_methods[] = {
 	PHP_ME(syx_application, getLastErrorMsg,     syx_application_void_arginfo,         ZEND_ACC_PUBLIC)
 	PHP_ME(syx_application, clearLastError,      syx_application_void_arginfo,         ZEND_ACC_PUBLIC)
 	PHP_ME(syx_application, __destruct,          NULL,                     ZEND_ACC_PUBLIC | ZEND_ACC_DTOR)
-	PHP_ME(syx_application, __clone,             NULL,                     ZEND_ACC_PRIVATE | ZEND_ACC_CLONE)
+	PHP_ME(syx_application, __clone,             NULL,                     ZEND_ACC_PRIVATE)
 	PHP_ME(syx_application, __sleep,             NULL,                     ZEND_ACC_PRIVATE)
 	PHP_ME(syx_application, __wakeup,            NULL,                     ZEND_ACC_PRIVATE)
 	{NULL, NULL, NULL}

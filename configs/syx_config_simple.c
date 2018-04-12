@@ -30,7 +30,7 @@
 
 zend_class_entry *syx_config_simple_ce;
 
-#ifdef HAVE_SPL
+#if defined(HAVE_SPL) && PHP_VERSION_ID < 70200
 extern PHPAPI zend_class_entry *spl_ce_Countable;
 #endif
 
@@ -365,10 +365,10 @@ SYX_STARTUP_FUNCTION(config_simple) {
 	SYX_INIT_CLASS_ENTRY(ce, "Syx\\Config\\Simple", syx_config_simple_methods);
 	syx_config_simple_ce = zend_register_internal_class_ex(&ce, syx_config_ce);
 
-#ifdef HAVE_SPL
+#if defined(HAVE_SPL) && PHP_VERSION_ID < 70200
 	zend_class_implements(syx_config_simple_ce, 3, zend_ce_iterator, zend_ce_arrayaccess, spl_ce_Countable);
-#else
-	zend_class_implements(syx_config_simple_ce, 2, zend_ce_iterator, zend_ce_arrayaccess);
+#elif PHP_VERSION_ID >= 70200
+	zend_class_implements(syx_config_simple_ce, 3, zend_ce_iterator, zend_ce_arrayaccess, zend_ce_countable);
 #endif
 	zend_declare_property_bool(syx_config_simple_ce, ZEND_STRL(SYX_CONFIG_PROPERT_NAME_READONLY), 0, ZEND_ACC_PROTECTED);
 

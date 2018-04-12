@@ -265,7 +265,7 @@ zend_function_entry syx_request_http_methods[] = {
 	PHP_ME(syx_request_http, get,			NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(syx_request_http, isXmlHttpRequest, 	NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(syx_request_http, __construct,		NULL, ZEND_ACC_PUBLIC | ZEND_ACC_CTOR)
-	PHP_ME(syx_request_http, __clone,		NULL, ZEND_ACC_PRIVATE | ZEND_ACC_CLONE)
+	PHP_ME(syx_request_http, __clone,		NULL, ZEND_ACC_PRIVATE)
 	{NULL, NULL, NULL}
 };
 /* }}} */

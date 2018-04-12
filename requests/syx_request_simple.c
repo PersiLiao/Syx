@@ -234,7 +234,7 @@ PHP_METHOD(syx_request_simple, __clone) {
  */
 zend_function_entry syx_request_simple_methods[] = {
 	PHP_ME(syx_request_simple, __construct,	NULL, ZEND_ACC_PUBLIC|ZEND_ACC_CTOR)
-	PHP_ME(syx_request_simple, __clone,		NULL, ZEND_ACC_PRIVATE|ZEND_ACC_CLONE)
+	PHP_ME(syx_request_simple, __clone,		NULL, ZEND_ACC_PRIVATE)
 	PHP_ME(syx_request_simple, getQuery, 	NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(syx_request_simple, getRequest, 	NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(syx_request_simple, getPost, 		NULL, ZEND_ACC_PUBLIC)

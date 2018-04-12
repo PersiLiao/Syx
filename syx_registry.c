@@ -186,7 +186,7 @@ PHP_METHOD(syx_registry, getInstance) {
 */
 zend_function_entry syx_registry_methods[] = {
 	PHP_ME(syx_registry, __construct, 	NULL, ZEND_ACC_CTOR|ZEND_ACC_PRIVATE)
-	PHP_ME(syx_registry, __clone, 		NULL, ZEND_ACC_CLONE|ZEND_ACC_PRIVATE)
+	PHP_ME(syx_registry, __clone, 		NULL, ZEND_ACC_PRIVATE)
 	PHP_ME(syx_registry, get, syx_registry_get_arginfo, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
 	PHP_ME(syx_registry, has, syx_registry_has_arginfo, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
 	PHP_ME(syx_registry, set, syx_registry_set_arginfo, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
