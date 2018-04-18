@@ -28,10 +28,10 @@ zend_class_entry * syx_plugin_ce;
 
 /** {{{ ARG_INFO
  */
-ZEND_BEGIN_ARG_INFO_EX(plugin_arg_ns, 0, 0, 2)
+SYX_BEGIN_ARG_INFO_EX(plugin_arg_ns, 0, 0, 2)
 	ZEND_ARG_OBJ_INFO(0, request, Syx\\RequestAbstract, 0)
 	ZEND_ARG_OBJ_INFO(0, response, Syx\\ResponseAbstract, 0)
-ZEND_END_ARG_INFO()
+SYX_END_ARG_INFO()
 /* }}} */
 
 /** {{{ proto public Syx_Plugin::routerStartup(Syx_Request_Abstract $request, Syx_Response_Abstract $response)

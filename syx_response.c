@@ -26,65 +26,91 @@
 #include "php_syx.h"
 #include "syx_namespace.h"
 #include "syx_response.h"
+#include "syx_dispatcher.h"
 #include "syx_exception.h"
 
+#include "server/syx_server_interface.h"
 #include "responses/syx_response_http.h"
 #include "responses/syx_response_cli.h"
+#include "responses/syx_response_swoole.h"
+#include "responses/syx_response_swoole_tcp.h"
+#include "responses/syx_response_swoole_http.h"
+#include "responses/syx_response_swoole_websocket.h"
 
 zend_class_entry *syx_response_ce;
 
 /** {{{ ARG_INFO
  */
-ZEND_BEGIN_ARG_INFO_EX(syx_response_void_arginfo, 0, 0, 0)
-ZEND_END_ARG_INFO()
+SYX_BEGIN_ARG_INFO_EX(syx_response_get_body_arginfo, 0, 0, 1)
+	SYX_ARG_INFO(0, name)
+SYX_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(syx_response_get_body_arginfo, 0, 0, 0)
-	ZEND_ARG_INFO(0, name)
-ZEND_END_ARG_INFO()
+SYX_BEGIN_ARG_INFO_EX(syx_response_set_body_arginfo, 0, 0, 1)
+	SYX_ARG_INFO(0, body)
+	SYX_ARG_INFO(0, name)
+SYX_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(syx_response_set_body_arginfo, 0, 0, 1)
-	ZEND_ARG_INFO(0, body)
-	ZEND_ARG_INFO(0, name)
-ZEND_END_ARG_INFO()
+SYX_BEGIN_ARG_INFO_EX(syx_response_clear_body_arginfo, 0, 0, 1)
+	SYX_ARG_INFO(0, name)
+SYX_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(syx_response_clear_body_arginfo, 0, 0, 0)
-	ZEND_ARG_INFO(0, name)
-ZEND_END_ARG_INFO()
+SYX_BEGIN_ARG_INFO_EX(syx_response_set_response_type_arginfo, 0, 0, 1)
+    SYX_ARG_INFO(0, type)
+SYX_END_ARG_INFO()
+
 /* }}} */
 
 /** {{{ syx_response_t * syx_response_instance(syx_response_t *this_ptr, char *sapi_name)
  */
-syx_response_t * syx_response_instance(syx_response_t *this_ptr, char *sapi_name) {
-	zval 			header, body;
+syx_response_t * syx_response_instance(syx_dispatcher_t *syx_dispatcher, syx_response_t *this_ptr) {
+	zval header, body, cookie = {{0}};
 	zend_class_entry 	*ce;
 	syx_response_t 		*instance;
+	uint sapi_len;
+	char *sapi_name = NULL;
 
-	if (strncasecmp(sapi_name, "cli", 3)) {
-		ce = syx_response_http_ce;
-	} else {
-		ce = syx_response_cli_ce;
+	sapi_name = SYX_G(sapi);
+	if(sapi_name == NULL || strlen(sapi_name) == 0){
+	    sapi_name = sapi_module.name;
 	}
 
-    instance = this_ptr;
-    if (ZVAL_IS_NULL(this_ptr)) {
-        object_init_ex(instance, ce);
-    }
-
-	array_init(&header);
-	zend_update_property(ce, instance, ZEND_STRL(SYX_RESPONSE_PROPERTY_NAME_HEADER), &header);
-	zval_ptr_dtor(&header);
-
-	array_init(&body);
-	zend_update_property(ce, instance, ZEND_STRL(SYX_RESPONSE_PROPERTY_NAME_BODY), &body);
-	zval_ptr_dtor(&body);
-
-	return instance;
+	if(strncasecmp(sapi_name, SYX_SERVER_TYPE_SWOOLE, strlen(SYX_SERVER_TYPE_SWOOLE)) == 0){
+	    if(strncasecmp(sapi_name, SYX_SERVER_TYPE_SWOOLE_TCP, strlen(SYX_SERVER_TYPE_SWOOLE_TCP)) == 0 && instanceof_function(Z_OBJCE_P(this_ptr), syx_response_swoole_tcp_ce)){
+	        return this_ptr;
+	    }else if(strncasecmp(sapi_name, SYX_SERVER_TYPE_SWOOLE_HTTP, strlen(SYX_SERVER_TYPE_SWOOLE_HTTP)) == 0 && instanceof_function(Z_OBJCE_P(this_ptr), syx_response_swoole_http_ce)){
+	        array_init(&header);
+            zend_update_property(syx_response_swoole_http_ce, this_ptr, ZEND_STRL(SYX_RESPONSE_PROPERTY_NAME_HEADER), &header);
+            zval_ptr_dtor(&header);
+            array_init(&cookie);
+            zend_update_property(syx_response_swoole_http_ce, this_ptr, ZEND_STRL(SYX_RESPONSE_PROPERTY_NAME_COOKIE), &cookie);
+            zval_ptr_dtor(&cookie);
+            return this_ptr;
+	    }else if(strncasecmp(sapi_name, SYX_SERVER_TYPE_SWOOLE_WEBSOCKET, strlen(SYX_SERVER_TYPE_SWOOLE_WEBSOCKET)) == 0 && instanceof_function(Z_OBJCE_P(this_ptr), syx_response_swoole_websocket_ce)){
+	        return this_ptr;
+	    }
+	}else{
+	    if (strncasecmp(sapi_name, "cli", 3)) {
+            ce = syx_response_http_ce;
+        } else {
+            ce = syx_response_cli_ce;
+        }
+	    if (Z_ISUNDEF_P(this_ptr)) {
+            object_init_ex(this_ptr, ce);
+            array_init(&header);
+            zend_update_property(ce, this_ptr, ZEND_STRL(SYX_RESPONSE_PROPERTY_NAME_HEADER), &header);
+            zval_ptr_dtor(&header);
+            array_init(&cookie);
+            zend_update_property(syx_response_swoole_http_ce, this_ptr, ZEND_STRL(SYX_RESPONSE_PROPERTY_NAME_COOKIE), &cookie);
+            zval_ptr_dtor(&cookie);
+        }
+	}
+	return this_ptr;
 }
 /* }}} */
 
 /** {{{ static int syx_response_set_body(syx_response_t *response, char *name, int name_len, char *body, long body_len)
  */
-#if 0
+
 static int syx_response_set_body(syx_response_t *response, char *name, int name_len, char *body, long body_len) {
 	zval *zbody;
 	zend_class_entry *response_ce;
@@ -95,18 +121,13 @@ static int syx_response_set_body(syx_response_t *response, char *name, int name_
 
 	response_ce = Z_OBJCE_P(response);
 
-	zbody = zend_read_property(response_ce, response, ZEND_STRL(SYX_RESPONSE_PROPERTY_NAME_BODY), 1);
-
+	zbody = zend_read_property(response_ce, response, ZEND_STRL(SYX_RESPONSE_PROPERTY_NAME_BODY), 1, NULL);
 	zval_ptr_dtor(&zbody);
-
-	MAKE_STD_ZVAL(zbody);
-	ZVAL_STRINGL(zbody, body, body_len, 1);
-
+	ZVAL_STRINGL(zbody, body, body_len);
 	zend_update_property(response_ce, response, ZEND_STRL(SYX_RESPONSE_PROPERTY_NAME_BODY), zbody);
-
+	zval_ptr_dtor(zbody);
 	return 1;
 }
-#endif
 /* }}} */
 
 /** {{{ int syx_response_alter_body(syx_response_t *response, zend_string *name, zend_string *body, int flag)
@@ -212,21 +233,7 @@ zval * syx_response_get_body_str(syx_response_t *response, char *name, size_t le
 
 /** {{{ int syx_response_send(syx_response_t *response)
  */
-int syx_response_send(syx_response_t *response) {
-	zval *zbody;
-	zval *val;
 
-	zbody = zend_read_property(syx_response_ce,
-			response, ZEND_STRL(SYX_RESPONSE_PROPERTY_NAME_BODY), 1, NULL);
-
-	ZEND_HASH_FOREACH_VAL(Z_ARRVAL_P(zbody), val) {
-		if (UNEXPECTED(Z_TYPE_P(val) != IS_STRING)) {
-			continue;
-		}
-		php_write(Z_STRVAL_P(val), Z_STRLEN_P(val));
-	} ZEND_HASH_FOREACH_END();
-	return 1;
-}
 /* }}} */
 
 /** {{{ proto private Syx_Response_Abstract::__construct()
@@ -284,70 +291,16 @@ PHP_METHOD(syx_response, prependBody) {
 }
 /* }}} */
 
-/** {{{ proto public Syx_Response_Abstract::setHeader($name, $value, $replace = 0)
-*/
-PHP_METHOD(syx_response, setHeader) {
-	RETURN_FALSE;
-}
-/* }}} */
-
-/** {{{ proto protected Syx_Response_Abstract::setAllHeaders(void)
-*/
-PHP_METHOD(syx_response, setAllHeaders) {
-	RETURN_FALSE;
-}
-/* }}} */
-
-/** {{{ proto public Syx_Response_Abstract::getHeader(void)
-*/
-PHP_METHOD(syx_response, getHeader) {
-	RETURN_NULL();
-}
-/* }}} */
-
-/** {{{ proto public Syx_Response_Abstract::clearHeaders(void)
-*/
-PHP_METHOD(syx_response, clearHeaders) {
-	RETURN_FALSE;
-}
-/* }}} */
-
-/** {{{ proto public Syx_Response_Abstract::setRedirect(string $url)
-*/
-PHP_METHOD(syx_response, setRedirect) {
-	char 	*url;
-	size_t 	url_len;
-
-	if (zend_parse_parameters(ZEND_NUM_ARGS(), "s", &url, &url_len) == FAILURE) {
-		return;
-	}
-
-	if (!url_len) {
-		RETURN_FALSE;
-	}
-
-	RETURN_BOOL(syx_response_set_redirect(getThis(), url, url_len));
-}
-/* }}} */
-
 /** {{{ proto public Syx_Response_Abstract::setBody($body, $name = NULL)
 */
 PHP_METHOD(syx_response, setBody) {
-	zend_string	*name = NULL;
-	zend_string *body;
-	syx_response_t *self;
+    zend_string *body;
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS(), "S|S", &body, &name) == FAILURE) {
+	if (zend_parse_parameters_throw(ZEND_NUM_ARGS(), "S", &body) == FAILURE) {
 		return;
 	}
-
-	self = getThis();
-
-	if (syx_response_alter_body(self, name, body, SYX_RESPONSE_REPLACE)) {
-		RETURN_ZVAL(self, 1, 0);
-	}
-
-	RETURN_FALSE;
+	zend_update_property_str(syx_response_ce, getThis(), ZEND_STRL(SYX_RESPONSE_PROPERTY_NAME_BODY), body);
+	RETURN_TRUE;
 }
 /* }}} */
 
@@ -397,12 +350,14 @@ PHP_METHOD(syx_response, getBody) {
 }
 /* }}} */
 
-/** {{{ proto public Syx_Response_Abstract::response(void)
- */
-PHP_METHOD(syx_response, response) {
-	RETURN_BOOL(syx_response_send(getThis()));
+PHP_METHOD(syx_response, setResponseType){
+    syx_response_t *level;
+    if(zend_parse_parameters_throw(ZEND_NUM_ARGS(), "l", &level) == FAILURE){
+        return;
+    }
+    zend_update_property_long(syx_response_ce, getThis(), ZEND_STRL(SYX_RESPONSE_PROPERTY_NAME_SEND_TYPE), level);
+    RETURN_TRUE;
 }
-/* }}} */
 
 /** {{{ proto public Syx_Response_Abstract::__toString(void)
  */
@@ -417,6 +372,10 @@ PHP_METHOD(syx_response, __toString) {
 }
 /* }}} */
 
+PHP_METHOD(syx_response, setFile){
+    RETURN_TRUE;
+}
+
 /** {{{ proto public Syx_Response_Abstract::__clone(void)
 */
 PHP_METHOD(syx_response, __clone) {
@@ -426,16 +385,17 @@ PHP_METHOD(syx_response, __clone) {
 /** {{{ syx_response_methods
 */
 zend_function_entry syx_response_methods[] = {
-	PHP_ME(syx_response, __construct, 	syx_response_void_arginfo, 		ZEND_ACC_PUBLIC|ZEND_ACC_CTOR)
-	PHP_ME(syx_response, __destruct,  	syx_response_void_arginfo, 		ZEND_ACC_PUBLIC|ZEND_ACC_DTOR)
-	PHP_ME(syx_response, __clone,		NULL, 					ZEND_ACC_PRIVATE)
-	PHP_ME(syx_response, __toString,	NULL, 					ZEND_ACC_PUBLIC)
+	PHP_ME(syx_response, __destruct,  	syx_response_void_arginfo, 		    ZEND_ACC_PUBLIC | ZEND_ACC_DTOR)
+	PHP_ME(syx_response, __clone,		syx_response_void_arginfo, 		    ZEND_ACC_PRIVATE)
+	PHP_ME(syx_response, __toString,	syx_response_void_arginfo, 		    ZEND_ACC_PUBLIC)
 	PHP_ME(syx_response, setBody,		syx_response_set_body_arginfo, 		ZEND_ACC_PUBLIC)
 	PHP_ME(syx_response, appendBody,	syx_response_set_body_arginfo, 		ZEND_ACC_PUBLIC)
 	PHP_ME(syx_response, prependBody,	syx_response_set_body_arginfo, 		ZEND_ACC_PUBLIC)
 	PHP_ME(syx_response, clearBody,		syx_response_clear_body_arginfo, 	ZEND_ACC_PUBLIC)
 	PHP_ME(syx_response, getBody,		syx_response_get_body_arginfo, 		ZEND_ACC_PUBLIC)
-	PHP_ME(syx_response, response,		syx_response_void_arginfo, 			ZEND_ACC_PUBLIC)
+	PHP_ME(syx_response, setResponseType,  syx_response_set_response_type_arginfo,      ZEND_ACC_PUBLIC)
+	PHP_ME(syx_response, setFile,  syx_response_set_response_type_arginfo,      ZEND_ACC_PUBLIC)
+	PHP_ABSTRACT_ME(syx_response, response,	syx_response_void_arginfo)
 	{NULL, NULL, NULL}
 };
 /* }}} */
@@ -452,11 +412,20 @@ SYX_STARTUP_FUNCTION(response) {
 
 	zend_declare_property_null(syx_response_ce, ZEND_STRL(SYX_RESPONSE_PROPERTY_NAME_HEADER), ZEND_ACC_PROTECTED);
 	zend_declare_property_null(syx_response_ce, ZEND_STRL(SYX_RESPONSE_PROPERTY_NAME_BODY), ZEND_ACC_PROTECTED);
-	zend_declare_property_bool(syx_response_ce, ZEND_STRL(SYX_RESPONSE_PROPERTY_NAME_HEADEREXCEPTION), 0, ZEND_ACC_PROTECTED);
 	zend_declare_class_constant_stringl(syx_response_ce, ZEND_STRL(SYX_RESPONSE_PROPERTY_NAME_DEFAULTBODYNAME), ZEND_STRL(SYX_RESPONSE_PROPERTY_NAME_DEFAULTBODY));
+	zend_declare_property_long(syx_response_ce, ZEND_STRL(SYX_RESPONSE_PROPERTY_NAME_SEND_TYPE), SYX_RESPONSE_CONSTANT_NAME_SIMPLE_VALUE, ZEND_ACC_PROTECTED);
+
+	zend_declare_class_constant_long(syx_response_ce, ZEND_STRL(SYX_RESPONSE_CONSTANT_NAME_SIMPLE), SYX_RESPONSE_CONSTANT_NAME_SIMPLE_VALUE);
+	zend_declare_class_constant_long(syx_response_ce, ZEND_STRL(SYX_RESPONSE_CONSTANT_NAME_TEXT), SYX_RESPONSE_CONSTANT_NAME_TEXT_VALUE);
+	zend_declare_class_constant_long(syx_response_ce, ZEND_STRL(SYX_RESPONSE_CONSTANT_NAME_FILE), SYX_RESPONSE_CONSTANT_NAME_FILE_VALUE);
+	zend_declare_class_constant_long(syx_response_ce, ZEND_STRL(SYX_RESPONSE_CONSTANT_NAME_BINARY), SYX_RESPONSE_CONSTANT_NAME_BINARY_VALUE);
 
 	SYX_STARTUP(response_http);
 	SYX_STARTUP(response_cli);
+	SYX_STARTUP(response_swoole);
+	SYX_STARTUP(response_swoole_tcp);
+	SYX_STARTUP(response_swoole_http);
+	SYX_STARTUP(response_swoole_websocket);
 
 	return SUCCESS;
 }

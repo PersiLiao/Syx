@@ -18,7 +18,7 @@
 #define SYX_ROUTER_H
 
 #define SYX_ROUTER_DEFAULT_ACTION	 	"index"
-#define SYX_ROUTER_DEFAULT_CONTROLLER  	"index"
+#define SYX_ROUTER_DEFAULT_CONTROLLER  	"Index"
 #define SYX_ROUTER_DEFAULT_MODULE	  	"index"
 #define SYX_DEFAULT_EXT 		 	   	"php"
 

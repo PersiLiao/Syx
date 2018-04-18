@@ -22,8 +22,8 @@
 #include "zend_smart_str.h" /* for smart_str */
 
 #include "php_syx.h"
-#include "syx_application.h"
 #include "syx_namespace.h"
+#include "syx_application.h"
 #include "syx_request.h"
 #include "syx_loader.h"
 #include "syx_exception.h"
@@ -32,38 +32,38 @@ zend_class_entry *syx_loader_ce;
 
 /** {{{ ARG_INFO
  */
-ZEND_BEGIN_ARG_INFO_EX(syx_loader_void_arginfo, 0, 0, 0)
-ZEND_END_ARG_INFO()
+SYX_BEGIN_ARG_INFO_EX(syx_loader_void_arginfo, 0, 0, 0)
+SYX_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(syx_loader_getinstance_arginfo, 0, 0, 0)
-    ZEND_ARG_INFO(0, local_library_path)
-    ZEND_ARG_INFO(0, global_library_path)
-ZEND_END_ARG_INFO()
+SYX_BEGIN_ARG_INFO_EX(syx_loader_getinstance_arginfo, 0, 0, 0)
+    SYX_ARG_INFO(0, local_library_path)
+    SYX_ARG_INFO(0, global_library_path)
+SYX_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(syx_loader_autoloader_arginfo, 0, 0, 1)
-    ZEND_ARG_INFO(0, class_name)
-ZEND_END_ARG_INFO()
+SYX_BEGIN_ARG_INFO_EX(syx_loader_autoloader_arginfo, 0, 0, 1)
+    SYX_ARG_INFO(0, class_name)
+SYX_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(syx_loader_regnamespace_arginfo, 0, 0, 1)
-    ZEND_ARG_INFO(0, name_prefix)
-ZEND_END_ARG_INFO()
+SYX_BEGIN_ARG_INFO_EX(syx_loader_regnamespace_arginfo, 0, 0, 1)
+    SYX_ARG_INFO(0, name_prefix)
+SYX_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(syx_loader_islocalname_arginfo, 0, 0, 1)
-    ZEND_ARG_INFO(0, class_name)
-ZEND_END_ARG_INFO()
+SYX_BEGIN_ARG_INFO_EX(syx_loader_islocalname_arginfo, 0, 0, 1)
+    SYX_ARG_INFO(0, class_name)
+SYX_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(syx_loader_import_arginfo, 0, 0, 1)
-    ZEND_ARG_INFO(0, file)
-ZEND_END_ARG_INFO()
+SYX_BEGIN_ARG_INFO_EX(syx_loader_import_arginfo, 0, 0, 1)
+    SYX_ARG_INFO(0, file)
+SYX_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(syx_loader_setlib_arginfo, 0, 0, 1)
-    ZEND_ARG_INFO(0, library_path)
-    ZEND_ARG_INFO(0, is_global)
-ZEND_END_ARG_INFO()
+SYX_BEGIN_ARG_INFO_EX(syx_loader_setlib_arginfo, 0, 0, 1)
+    SYX_ARG_INFO(0, library_path)
+    SYX_ARG_INFO(0, is_global)
+SYX_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(syx_loader_getlib_arginfo, 0, 0, 0)
-    ZEND_ARG_INFO(0, is_global)
-ZEND_END_ARG_INFO()
+SYX_BEGIN_ARG_INFO_EX(syx_loader_getlib_arginfo, 0, 0, 0)
+    SYX_ARG_INFO(0, is_global)
+SYX_END_ARG_INFO()
 /* }}} */
 
 int syx_loader_register(syx_loader_t *loader) /* {{{ */ {
@@ -196,13 +196,11 @@ syx_loader_t *syx_loader_instance(syx_loader_t *this_ptr, zend_string *library_p
 
 	if (IS_OBJECT == Z_TYPE_P(instance)) {
 		if (library_path) {
-			zend_update_property_str(syx_loader_ce,
-					instance, ZEND_STRL(SYX_LOADER_PROPERTY_NAME_LIBRARY), library_path);
+			zend_update_property_str(syx_loader_ce, instance, ZEND_STRL(SYX_LOADER_PROPERTY_NAME_LIBRARY), library_path);
 		}
 
 		if (global_path) {
-			zend_update_property_str(syx_loader_ce,
-					instance, ZEND_STRL(SYX_LOADER_PROPERTY_NAME_GLOBAL_LIB), global_path);
+			zend_update_property_str(syx_loader_ce, instance, ZEND_STRL(SYX_LOADER_PROPERTY_NAME_GLOBAL_LIB), global_path);
 		}
 		return instance;
 	}
@@ -217,20 +215,14 @@ syx_loader_t *syx_loader_instance(syx_loader_t *this_ptr, zend_string *library_p
 	}
 
 	if (library_path && global_path) {
-		zend_update_property_str(syx_loader_ce,
-				this_ptr, ZEND_STRL(SYX_LOADER_PROPERTY_NAME_LIBRARY), library_path);
-		zend_update_property_str(syx_loader_ce,
-				this_ptr, ZEND_STRL(SYX_LOADER_PROPERTY_NAME_GLOBAL_LIB), global_path);
+		zend_update_property_str(syx_loader_ce, this_ptr, ZEND_STRL(SYX_LOADER_PROPERTY_NAME_LIBRARY), library_path);
+		zend_update_property_str(syx_loader_ce, this_ptr, ZEND_STRL(SYX_LOADER_PROPERTY_NAME_GLOBAL_LIB), global_path);
 	} else if (!global_path) {
-		zend_update_property_str(syx_loader_ce,
-				this_ptr, ZEND_STRL(SYX_LOADER_PROPERTY_NAME_LIBRARY), library_path);
-		zend_update_property_str(syx_loader_ce,
-				this_ptr, ZEND_STRL(SYX_LOADER_PROPERTY_NAME_GLOBAL_LIB), library_path);
+		zend_update_property_str(syx_loader_ce, this_ptr, ZEND_STRL(SYX_LOADER_PROPERTY_NAME_LIBRARY), library_path);
+		zend_update_property_str(syx_loader_ce, this_ptr, ZEND_STRL(SYX_LOADER_PROPERTY_NAME_GLOBAL_LIB), library_path);
 	} else {
-		zend_update_property_str(syx_loader_ce,
-				this_ptr, ZEND_STRL(SYX_LOADER_PROPERTY_NAME_LIBRARY), global_path);
-		zend_update_property_str(syx_loader_ce,
-				this_ptr, ZEND_STRL(SYX_LOADER_PROPERTY_NAME_GLOBAL_LIB), global_path);
+		zend_update_property_str(syx_loader_ce, this_ptr, ZEND_STRL(SYX_LOADER_PROPERTY_NAME_LIBRARY), global_path);
+		zend_update_property_str(syx_loader_ce, this_ptr, ZEND_STRL(SYX_LOADER_PROPERTY_NAME_GLOBAL_LIB), global_path);
 	}
 
 	if (!syx_loader_register(this_ptr)) {

@@ -29,6 +29,7 @@
 #include "syx_logo.h"
 #include "syx_loader.h"
 #include "syx_exception.h"
+#include "syx_namespace.h"
 #include "syx_application.h"
 #include "syx_dispatcher.h"
 #include "syx_config.h"
@@ -42,6 +43,7 @@
 #include "syx_plugin.h"
 #include "syx_registry.h"
 #include "syx_session.h"
+#include "syx_server.h"
 
 ZEND_DECLARE_MODULE_GLOBALS(syx);
 
@@ -111,6 +113,7 @@ PHP_MINIT_FUNCTION(syx)
 	SYX_STARTUP(registry);
 	SYX_STARTUP(session);
 	SYX_STARTUP(exception);
+	SYX_STARTUP(server);
 
 	return SUCCESS;
 }
@@ -199,8 +202,10 @@ PHP_RSHUTDOWN_FUNCTION(syx)
 	if (SYX_G(ext)) {
 		zend_string_release(SYX_G(ext));
 	}
+	if (SYX_G(sapi)){
+	    SYX_G(sapi) = NULL;
+	}
 	SYX_G(default_route) = NULL;
-
 	return SUCCESS;
 }
 /* }}} */
@@ -211,11 +216,14 @@ PHP_MINFO_FUNCTION(syx)
 {
 	php_info_print_table_start();
 
-	php_info_print_table_header(2, "Syx support", "enabled");
+	php_info_print_table_header(2, "syx support", "enabled");
 	php_info_print_table_row(2, "Version", PHP_SYX_VERSION);
-	php_info_print_table_row(2, "Author", "PersiLiao");
-	php_info_print_table_row(2, "Supports", SYX_SUPPORT_URL);
-	php_info_print_table_row(2, "Based", "Yaf 3.0.4");
+	php_info_print_table_row(2, "Author", "PersiLiao[email: ican.lxc@gmail.com]");
+	php_info_print_table_row(2, "base on", "PHP7 && Swoole && Yaf");
+	php_info_print_table_row(2, "Tcp Server", "enabled");
+	php_info_print_table_row(2, "Http Server", "enabled");
+	php_info_print_table_row(2, "Websocket Server", "enabled");
+	php_info_print_table_row(2, "Rpc Server", "enabled");
 	php_info_print_table_end();
 
 	DISPLAY_INI_ENTRIES();

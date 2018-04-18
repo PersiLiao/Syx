@@ -17,6 +17,10 @@
 #ifndef PHP_SYX_DISPATCHER_H
 #define PHP_SYX_DISPATCHER_H
 
+#define SYX_DISPATCHER_PROPERTY_NAME_SAPI       "_sapi"
+#define SYX_DISPATCHER_PROPERTY_NAME_SERVER     "_server"
+#define SYX_DISPATCHER_PROPERTY_NAME_SWOOLE_SERVER "_swoole_server"
+#define SYX_DISPATCHER_PROPERTY_NAME_RESPONSE   "_response"
 #define SYX_DISPATCHER_PROPERTY_NAME_REQUEST    "_request"
 #define SYX_DISPATCHER_PROPERTY_NAME_VIEW       "_view"
 #define SYX_DISPATCHER_PROPERTY_NAME_ROUTER     "_router"
@@ -55,13 +59,17 @@
 		} \
 	} while(0)
 
+#define SYX_DISPATCHER_GET_SWOOLE_SERVER_TO(swoole_server_ptr) do{ \
+    syx_dispatcher_t *##swoole_server_ptr; \
+    ##swoole_server_ptr = zend_read_static_property(syx_dispatcher_ce, ZEND_STRL(SYX_DISPATCHER_PROPERTY_NAME_SERVER), 0); \
+    } while(0)
+
 extern zend_class_entry *syx_dispatcher_ce;
 
 syx_dispatcher_t *syx_dispatcher_instance(syx_dispatcher_t *this_ptr);
 syx_response_t *syx_dispatcher_dispatch(syx_dispatcher_t *dispatcher, zval *response_ptr);
 int syx_dispatcher_set_request(syx_dispatcher_t *dispatcher, syx_request_t *request);
 
-PHP_METHOD(syx_application, app);
 PHP_FUNCTION(set_error_handler);
 SYX_STARTUP_FUNCTION(dispatcher);
 

@@ -39,7 +39,11 @@ extern zend_module_entry syx_module_entry;
 #define SYX_G(v) (syx_globals.v)
 #endif
 
-#define PHP_SYX_VERSION 					"1.0.0"
+#define PHP_SYX_NAME "syx"
+#define PHP_SYX_VERSION	"2.0.0-dev"
+
+#define SYX_SAPI_SWOOLE "swoole"
+#define SYX_SAPI_SPL    "spl"
 
 #define SYX_STARTUP_FUNCTION(module)   	ZEND_MINIT_FUNCTION(syx_##module)
 #define SYX_RINIT_FUNCTION(module)		ZEND_RINIT_FUNCTION(syx_##module)
@@ -47,12 +51,14 @@ extern zend_module_entry syx_module_entry;
 #define SYX_SHUTDOWN_FUNCTION(module)  	ZEND_MSHUTDOWN_FUNCTION(syx_##module)
 #define SYX_SHUTDOWN(module)	 	    ZEND_MODULE_SHUTDOWN_N(syx_##module)(INIT_FUNC_ARGS_PASSTHRU)
 
+#define syx_zval_t          zval
 #define syx_application_t	zval
 #define syx_view_t 			zval
 #define syx_controller_t	zval
 #define syx_request_t		zval
 #define syx_router_t		zval
 #define syx_route_t			zval
+#define syx_server_t        zval
 #define syx_dispatcher_t	zval
 #define syx_action_t		zval
 #define syx_loader_t		zval
@@ -68,41 +74,51 @@ extern zend_module_entry syx_module_entry;
 extern PHPAPI void php_var_dump(zval **struc, int level);
 extern PHPAPI void php_debug_zval_dump(zval **struc, int level);
 
+#define GET_SOURCE_OBJ_VAR_TO_UPDATE_DEST(source_obj, source_key, dest_obj_ptr, dest_key) \
+    do{ \
+        syx_zval_t *ret_##source_key; \
+        ret_##source_key = zend_read_property(Z_OBJCE_P(source_obj), source_obj, ZEND_STRL(#source_key), 0, NULL); \
+        zend_update_property(Z_OBJCE_P(dest_obj_ptr), dest_obj_ptr, ZEND_STRL(dest_key), ret_##source_key); \
+    }while(0) \
+
+
+
 ZEND_BEGIN_MODULE_GLOBALS(syx)
     zend_string *namespace;
-	zend_string *ext;
-	zend_string *base_uri;
-	zend_string *directory;
-	zend_string *local_library;
-	zend_string *local_namespaces;
-	zend_string *view_directory;
-	zend_string *view_ext;
-	zend_string *default_module;
-	zend_string *default_controller;
-	zend_string *default_action;
-	zend_string *bootstrap;
-	char         *global_library;
-    char         *environ_name;
-	zend_bool 	lowcase_path;
-	zend_bool 	use_spl_autoload;
-	zend_bool 	throw_exception;
-	zend_bool   action_prefer;
-	zend_bool  	autoload_started;
-	zend_bool  	running;
-	zend_bool  	in_exception;
-	zend_bool  	catch_exception;
-	zend_bool   suppressing_warning;
-/* {{{ This only effects internally */
-	zend_bool  	st_compatible;
-/* }}} */
-	long		forward_limit;
-	HashTable	*configs;
-	zval 		 modules;
-	zval        *default_route;
-	zval        active_ini_file_section;
-	zval        *ini_wanted_section;
-	uint        parsing_flag;
-	zend_bool	use_namespace;
+    zend_string *ext;
+    zend_string *base_uri;
+    zend_string *directory;
+    zend_string *local_library;
+    zend_string *local_namespaces;
+    zend_string *view_directory;
+    zend_string *view_ext;
+    zend_string *default_module;
+    zend_string *default_controller;
+    zend_string *default_action;
+    zend_string *bootstrap;
+    zend_string *server_bootstrap;
+    char        *sapi;
+    char        *global_library;
+    char        *environ_name;
+    zend_bool 	  lowcase_path;
+    zend_bool 	  use_spl_autoload;
+    zend_bool 	  throw_exception;
+    zend_bool    action_prefer;
+    zend_bool  	autoload_started;
+    zend_bool  	running;
+    zend_bool  	in_exception;
+    zend_bool  	catch_exception;
+    zend_bool    suppressing_warning;
+    /* {{{ This only effects internally */
+    zend_bool  	st_compatible;
+    /* }}} */
+    long		forward_limit;
+    HashTable	*configs;
+    zval 		 modules;
+    zval        *default_route;
+    zval        active_ini_file_section;
+    zval        *ini_wanted_section;
+    uint        parsing_flag;
 ZEND_END_MODULE_GLOBALS(syx)
 
 PHP_MINIT_FUNCTION(syx);

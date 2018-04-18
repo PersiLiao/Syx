@@ -25,6 +25,7 @@
 #include "syx_namespace.h"
 #include "syx_request.h"
 #include "syx_exception.h"
+#include "requests/syx_request_http.h"
 #include "requests/syx_request_simple.h"
 
 static zend_class_entry *syx_request_simple_ce;
@@ -224,17 +225,10 @@ PHP_METHOD(syx_request_simple, get) {
 }
 /* }}} */
 
-/** {{{ proto private Syx_Request_Simple::__clone
- */
-PHP_METHOD(syx_request_simple, __clone) {
-}
-/* }}} */
-
 /** {{{ syx_request_simple_methods
  */
 zend_function_entry syx_request_simple_methods[] = {
 	PHP_ME(syx_request_simple, __construct,	NULL, ZEND_ACC_PUBLIC|ZEND_ACC_CTOR)
-	PHP_ME(syx_request_simple, __clone,		NULL, ZEND_ACC_PRIVATE)
 	PHP_ME(syx_request_simple, getQuery, 	NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(syx_request_simple, getRequest, 	NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(syx_request_simple, getPost, 		NULL, ZEND_ACC_PUBLIC)
@@ -251,7 +245,7 @@ zend_function_entry syx_request_simple_methods[] = {
 SYX_STARTUP_FUNCTION(request_simple){
 	zend_class_entry ce;
 	SYX_INIT_CLASS_ENTRY(ce, "Syx\\Request\\Simple", syx_request_simple_methods);
-	syx_request_simple_ce = zend_register_internal_class_ex(&ce, syx_request_ce);
+	syx_request_simple_ce = zend_register_internal_class_ex(&ce, syx_request_http_ce);
 	syx_request_simple_ce->ce_flags |= ZEND_ACC_FINAL;
 
 	return SUCCESS;

@@ -36,13 +36,13 @@ zend_class_entry *syx_route_regex_ce;
 
 /** {{{ ARG_INFO
  */
-ZEND_BEGIN_ARG_INFO_EX(syx_route_regex_construct_arginfo, 0, 0, 2)
-	ZEND_ARG_INFO(0, match)
+SYX_BEGIN_ARG_INFO_EX(syx_route_regex_construct_arginfo, 0, 0, 2)
+	SYX_ARG_INFO(0, match)
 	ZEND_ARG_ARRAY_INFO(0, route, 0)
 	ZEND_ARG_ARRAY_INFO(0, map, 1)
 	ZEND_ARG_ARRAY_INFO(0, verify, 1)
-	ZEND_ARG_INFO(0, reverse)
-ZEND_END_ARG_INFO()
+	SYX_ARG_INFO(0, reverse)
+SYX_END_ARG_INFO()
 /* }}} */
 
 syx_route_t * syx_route_regex_instance(syx_route_t *this_ptr, zval *route, zval *def, zval *map, zval *verify, zval *reverse) /* {{{ */ {

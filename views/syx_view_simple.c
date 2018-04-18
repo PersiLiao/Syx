@@ -33,32 +33,32 @@
 zend_class_entry *syx_view_simple_ce;
 
 /** {{{ ARG_INFO */
-ZEND_BEGIN_ARG_INFO_EX(syx_view_simple_construct_arginfo, 0, 0, 1)
-	ZEND_ARG_INFO(0, template_dir)
+SYX_BEGIN_ARG_INFO_EX(syx_view_simple_construct_arginfo, 0, 0, 1)
+	SYX_ARG_INFO(0, template_dir)
 	ZEND_ARG_ARRAY_INFO(0, options, 1)
-ZEND_END_ARG_INFO();
+SYX_END_ARG_INFO();
 
-ZEND_BEGIN_ARG_INFO_EX(syx_view_simple_get_arginfo, 0, 0, 0)
-	ZEND_ARG_INFO(0, name)
-ZEND_END_ARG_INFO()
+SYX_BEGIN_ARG_INFO_EX(syx_view_simple_get_arginfo, 0, 0, 0)
+	SYX_ARG_INFO(0, name)
+SYX_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(syx_view_simple_isset_arginfo, 0, 0, 1)
-	ZEND_ARG_INFO(0, name)
-ZEND_END_ARG_INFO();
+SYX_BEGIN_ARG_INFO_EX(syx_view_simple_isset_arginfo, 0, 0, 1)
+	SYX_ARG_INFO(0, name)
+SYX_END_ARG_INFO();
 
-ZEND_BEGIN_ARG_INFO_EX(syx_view_simple_assign_by_ref_arginfo, 0, 0, 2)
-	ZEND_ARG_INFO(0, name)
-	ZEND_ARG_INFO(1, value)
-ZEND_END_ARG_INFO();
+SYX_BEGIN_ARG_INFO_EX(syx_view_simple_assign_by_ref_arginfo, 0, 0, 2)
+	SYX_ARG_INFO(0, name)
+	SYX_ARG_INFO(1, value)
+SYX_END_ARG_INFO();
 
-ZEND_BEGIN_ARG_INFO_EX(syx_view_simple_eval_arginfo, 0, 0, 1)
-	ZEND_ARG_INFO(0, tpl_str)
-	ZEND_ARG_INFO(0, vars)
-ZEND_END_ARG_INFO();
+SYX_BEGIN_ARG_INFO_EX(syx_view_simple_eval_arginfo, 0, 0, 1)
+	SYX_ARG_INFO(0, tpl_str)
+	SYX_ARG_INFO(0, vars)
+SYX_END_ARG_INFO();
 
-ZEND_BEGIN_ARG_INFO_EX(syx_view_simple_clear_arginfo, 0, 0, 0)
-	ZEND_ARG_INFO(0, name)
-ZEND_END_ARG_INFO();
+SYX_BEGIN_ARG_INFO_EX(syx_view_simple_clear_arginfo, 0, 0, 0)
+	SYX_ARG_INFO(0, name)
+SYX_END_ARG_INFO();
 /* }}} */
 
 static int syx_view_simple_valid_var_name(char *var_name, int len) /* {{{ */

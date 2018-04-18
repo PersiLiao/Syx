@@ -18,22 +18,22 @@
 #define SYX_VIEW_INTERFACE_H
 
 SYX_BEGIN_ARG_INFO_EX(syx_view_assign_arginfo, 0, 0, 1)
-	ZEND_ARG_INFO(0, name)
-	ZEND_ARG_INFO(0, value)
+	SYX_ARG_INFO(0, name)
+	SYX_ARG_INFO(0, value)
 SYX_END_ARG_INFO()
 
 SYX_BEGIN_ARG_INFO_EX(syx_view_display_arginfo, 0, 0, 1)
-	ZEND_ARG_INFO(0, tpl)
-	ZEND_ARG_INFO(0, tpl_vars)
+	SYX_ARG_INFO(0, tpl)
+	SYX_ARG_INFO(0, tpl_vars)
 SYX_END_ARG_INFO()
 
 SYX_BEGIN_ARG_INFO_EX(syx_view_render_arginfo, 0, 0, 1)
-	ZEND_ARG_INFO(0, tpl)
-	ZEND_ARG_INFO(0, tpl_vars)
+	SYX_ARG_INFO(0, tpl)
+	SYX_ARG_INFO(0, tpl_vars)
 SYX_END_ARG_INFO()
 
 SYX_BEGIN_ARG_INFO_EX(syx_view_setpath_arginfo, 0, 0, 1)
-	ZEND_ARG_INFO(0, template_dir)
+	SYX_ARG_INFO(0, template_dir)
 SYX_END_ARG_INFO()
 
 SYX_BEGIN_ARG_INFO_EX(syx_view_getpath_arginfo, 0, 0, 0)

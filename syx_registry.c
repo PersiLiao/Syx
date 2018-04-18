@@ -28,22 +28,22 @@ zend_class_entry *syx_registry_ce;
 
 /* {{{ ARG_INFO
  */
-ZEND_BEGIN_ARG_INFO_EX(syx_registry_get_arginfo, 0, 0, 1)
-	ZEND_ARG_INFO(0, name)
-ZEND_END_ARG_INFO()
+SYX_BEGIN_ARG_INFO_EX(syx_registry_get_arginfo, 0, 0, 1)
+	SYX_ARG_INFO(0, name)
+SYX_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(syx_registry_has_arginfo, 0, 0, 1)
-	ZEND_ARG_INFO(0, name)
-ZEND_END_ARG_INFO()
+SYX_BEGIN_ARG_INFO_EX(syx_registry_has_arginfo, 0, 0, 1)
+	SYX_ARG_INFO(0, name)
+SYX_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(syx_registry_del_arginfo, 0, 0, 1)
-	ZEND_ARG_INFO(0, name)
-ZEND_END_ARG_INFO()
+SYX_BEGIN_ARG_INFO_EX(syx_registry_del_arginfo, 0, 0, 1)
+	SYX_ARG_INFO(0, name)
+SYX_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(syx_registry_set_arginfo, 0, 0, 2)
-	ZEND_ARG_INFO(0, name)
-	ZEND_ARG_INFO(0, value)
-ZEND_END_ARG_INFO()
+SYX_BEGIN_ARG_INFO_EX(syx_registry_set_arginfo, 0, 0, 2)
+	SYX_ARG_INFO(0, name)
+	SYX_ARG_INFO(0, value)
+SYX_END_ARG_INFO()
 /* }}} */
 
 syx_registry_t *syx_registry_instance(syx_registry_t *this_ptr) /* {{{ */ {

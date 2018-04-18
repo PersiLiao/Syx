@@ -42,66 +42,66 @@ zend_class_entry *syx_dispatcher_ce;
 
 /** {{{ ARG_INFO
  */
-ZEND_BEGIN_ARG_INFO_EX(syx_dispatcher_void_arginfo, 0, 0, 0)
-ZEND_END_ARG_INFO()
+SYX_BEGIN_ARG_INFO_EX(syx_dispatcher_void_arginfo, 0, 0, 0)
+SYX_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(syx_dispatcher_dispatch_arginfo, 0, 0, 1)
-    ZEND_ARG_INFO(0, request)
-ZEND_END_ARG_INFO()
+SYX_BEGIN_ARG_INFO_EX(syx_dispatcher_dispatch_arginfo, 0, 0, 1)
+    SYX_ARG_INFO(0, request)
+SYX_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(syx_dispatcher_seterrhdler_arginfo, 0, 0, 2)
-    ZEND_ARG_INFO(0, callback)
-	ZEND_ARG_INFO(0, error_types)
-ZEND_END_ARG_INFO()
+SYX_BEGIN_ARG_INFO_EX(syx_dispatcher_seterrhdler_arginfo, 0, 0, 2)
+    SYX_ARG_INFO(0, callback)
+	SYX_ARG_INFO(0, error_types)
+SYX_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(syx_dispatcher_flush_arginfo, 0, 0, 1)
-    ZEND_ARG_INFO(0, flag)
-ZEND_END_ARG_INFO()
+SYX_BEGIN_ARG_INFO_EX(syx_dispatcher_flush_arginfo, 0, 0, 1)
+    SYX_ARG_INFO(0, flag)
+SYX_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(syx_dispatcher_regplugin_arginfo, 0, 0, 1)
-    ZEND_ARG_INFO(0, plugin)
-ZEND_END_ARG_INFO()
+SYX_BEGIN_ARG_INFO_EX(syx_dispatcher_regplugin_arginfo, 0, 0, 1)
+    SYX_ARG_INFO(0, plugin)
+SYX_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(syx_dispatcher_setrequest_arginfo, 0, 0, 1)
-    ZEND_ARG_INFO(0, request)
-ZEND_END_ARG_INFO()
+SYX_BEGIN_ARG_INFO_EX(syx_dispatcher_setrequest_arginfo, 0, 0, 1)
+    SYX_ARG_INFO(0, request)
+SYX_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(syx_dispatcher_throwex_arginfo, 0, 0, 0)
-    ZEND_ARG_INFO(0, flag)
-ZEND_END_ARG_INFO()
+SYX_BEGIN_ARG_INFO_EX(syx_dispatcher_throwex_arginfo, 0, 0, 0)
+    SYX_ARG_INFO(0, flag)
+SYX_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(syx_dispatcher_catchex_arginfo, 0, 0, 0)
-    ZEND_ARG_INFO(0, flag)
-ZEND_END_ARG_INFO()
+SYX_BEGIN_ARG_INFO_EX(syx_dispatcher_catchex_arginfo, 0, 0, 0)
+    SYX_ARG_INFO(0, flag)
+SYX_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(syx_dispatcher_autorender_arginfo, 0, 0, 1)
-    ZEND_ARG_INFO(0, flag)
-ZEND_END_ARG_INFO()
+SYX_BEGIN_ARG_INFO_EX(syx_dispatcher_autorender_arginfo, 0, 0, 1)
+    SYX_ARG_INFO(0, flag)
+SYX_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(syx_dispatcher_returnresp_arginfo, 0, 0, 1)
-    ZEND_ARG_INFO(0, flag)
-ZEND_END_ARG_INFO()
+SYX_BEGIN_ARG_INFO_EX(syx_dispatcher_returnresp_arginfo, 0, 0, 1)
+    SYX_ARG_INFO(0, flag)
+SYX_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(syx_dispatcher_initview_arginfo, 0, 0, 1)
-    ZEND_ARG_INFO(0, templates_dir)
+SYX_BEGIN_ARG_INFO_EX(syx_dispatcher_initview_arginfo, 0, 0, 1)
+    SYX_ARG_INFO(0, templates_dir)
 	ZEND_ARG_ARRAY_INFO(0, options, 1)
-ZEND_END_ARG_INFO()
+SYX_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(syx_dispatcher_setview_arginfo, 0, 0, 1)
-    ZEND_ARG_INFO(0, view)
-ZEND_END_ARG_INFO()
+SYX_BEGIN_ARG_INFO_EX(syx_dispatcher_setview_arginfo, 0, 0, 1)
+    SYX_ARG_INFO(0, view)
+SYX_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(syx_dispatcher_setctrl_arginfo, 0, 0, 1)
-    ZEND_ARG_INFO(0, controller)
-ZEND_END_ARG_INFO()
+SYX_BEGIN_ARG_INFO_EX(syx_dispatcher_setctrl_arginfo, 0, 0, 1)
+    SYX_ARG_INFO(0, controller)
+SYX_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(syx_dispatcher_setmodule_arginfo, 0, 0, 1)
-    ZEND_ARG_INFO(0, module)
-ZEND_END_ARG_INFO()
+SYX_BEGIN_ARG_INFO_EX(syx_dispatcher_setmodule_arginfo, 0, 0, 1)
+    SYX_ARG_INFO(0, module)
+SYX_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(syx_dispatcher_setaction_arginfo, 0, 0, 1)
-    ZEND_ARG_INFO(0, action)
-ZEND_END_ARG_INFO()
+SYX_BEGIN_ARG_INFO_EX(syx_dispatcher_setaction_arginfo, 0, 0, 1)
+    SYX_ARG_INFO(0, action)
+SYX_END_ARG_INFO()
 
 /* }}} */
 
@@ -111,9 +111,7 @@ syx_dispatcher_t *syx_dispatcher_instance(syx_dispatcher_t *this_ptr) /* {{{ */ 
 	syx_dispatcher_t *instance;
 
 	instance = zend_read_static_property(syx_dispatcher_ce, ZEND_STRL(SYX_DISPATCHER_PROPERTY_NAME_INSTANCE), 1);
-
-	if (IS_OBJECT == Z_TYPE_P(instance)
-			&& instanceof_function(Z_OBJCE_P(instance), syx_dispatcher_ce)) {
+	if (IS_OBJECT == Z_TYPE_P(instance) && instanceof_function(Z_OBJCE_P(instance), syx_dispatcher_ce)) {
 		return instance;
 	}
 
@@ -232,14 +230,10 @@ static inline void syx_dispatcher_fix_default(syx_dispatcher_t *dispatcher, syx_
 		zend_update_property(syx_request_ce,
 				request, ZEND_STRL(SYX_REQUEST_PROPERTY_NAME_CONTROLLER), default_controller);
 	} else {
-		
-		/*upper controller*/
-		char *p = zend_str_tolower_dup(Z_STRVAL_P(controller), Z_STRLEN_P(controller));
-		*p = toupper(*p);
-
+	    char *p = zend_str_tolower_dup(Z_STRVAL_P(controller), Z_STRLEN_P(controller));
+	    *p = toupper(*p);
 		zend_update_property_stringl(syx_request_ce, request,
 				ZEND_STRL(SYX_REQUEST_PROPERTY_NAME_CONTROLLER), p, Z_STRLEN_P(controller));
-		
 		efree(p);
 	}
 
@@ -248,14 +242,8 @@ static inline void syx_dispatcher_fix_default(syx_dispatcher_t *dispatcher, syx_
 				dispatcher, ZEND_STRL(SYX_DISPATCHER_PROPERTY_NAME_ACTION), 1, NULL);
 		zend_update_property(syx_request_ce, request, ZEND_STRL(SYX_REQUEST_PROPERTY_NAME_ACTION), default_action);
 	} else {
-		
-		/*lower action*/
-		char *p = zend_str_tolower_dup(Z_STRVAL_P(action), Z_STRLEN_P(action));
-		
 		zend_update_property_stringl(syx_request_ce,
-				request, ZEND_STRL(SYX_REQUEST_PROPERTY_NAME_ACTION), p, Z_STRLEN_P(action));
-
-		efree(p);
+				request, ZEND_STRL(SYX_REQUEST_PROPERTY_NAME_ACTION), Z_STRVAL_P(action), Z_STRLEN_P(action));
 	}
 
 }
@@ -263,8 +251,7 @@ static inline void syx_dispatcher_fix_default(syx_dispatcher_t *dispatcher, syx_
 
 int syx_dispatcher_set_request(syx_dispatcher_t *dispatcher, syx_request_t *request) /* {{{ */ {
 	if (request) {
-		zend_update_property(syx_dispatcher_ce,
-				dispatcher, ZEND_STRL(SYX_DISPATCHER_PROPERTY_NAME_REQUEST), request);
+		zend_update_property(syx_dispatcher_ce, dispatcher, ZEND_STRL(SYX_DISPATCHER_PROPERTY_NAME_REQUEST), request);
 		return 1;
 	}
 	return 0;
@@ -281,12 +268,12 @@ zend_class_entry *syx_dispatcher_get_controller(zend_string *app_dir, zend_strin
 	if (EXPECTED(directory_len)) {
 		zend_string *class;
 		zend_string *class_lowercase;
-		zend_class_entry *ce 	= NULL;
+		zend_class_entry *ce = NULL;
 
 		class = strpprintf(0, "%s%c%s%c%s%c%s", ZSTR_VAL(SYX_G(namespace)), '\\', ZSTR_VAL(module), '\\',SYX_CONTROLLER_DIRECTORY_NAME , '\\', ZSTR_VAL(controller) );
 
 		class_lowercase = zend_string_tolower(class);
-
+		
 		if ((ce = zend_hash_find_ptr(EG(class_table), class_lowercase)) == NULL) {
 			if (!syx_internal_autoload(ZSTR_VAL(controller), ZSTR_LEN(controller), &directory)) {
 				syx_trigger_error(SYX_ERR_NOTFOUND_CONTROLLER,
@@ -497,11 +484,11 @@ int syx_dispatcher_handle(syx_dispatcher_t *dispatcher, syx_request_t *request, 
 		if (!ce) {
 			return 0;
 		} else {
-			zval ret;
-			zval action, *render;
-			zend_string *view_dir;
-			zend_string *func_name;
-			syx_controller_t icontroller;
+			zval ret = {{0}};
+			zval action = {{0}}, *render = NULL;
+			zend_string *view_dir = NULL;
+			zend_string *func_name = NULL;
+			syx_controller_t icontroller = {{0}};
 
 			object_init_ex(&icontroller, ce);
 
@@ -743,7 +730,7 @@ void syx_dispatcher_exception_handler(syx_dispatcher_t *dispatcher, syx_request_
 		}
 	}
 
-	(void)syx_response_send(response);
+//	(void)syx_response_send(response);
 
 	EG(opline_before_exception) = opline;
 	SYX_EXCEPTION_ERASE_EXCEPTION();
@@ -783,7 +770,7 @@ syx_response_t *syx_dispatcher_dispatch(syx_dispatcher_t *dispatcher, zval *resp
 	syx_request_t *request;
 	uint nesting = SYX_G(forward_limit);
 
-	response = syx_response_instance(response_ptr, sapi_module.name);
+	response = syx_response_instance(dispatcher, response_ptr);
 	request	= zend_read_property(syx_dispatcher_ce,
 			dispatcher, ZEND_STRL(SYX_DISPATCHER_PROPERTY_NAME_REQUEST), 1, NULL);
 	plugins	= zend_read_property(syx_dispatcher_ce,
@@ -844,15 +831,12 @@ syx_response_t *syx_dispatcher_dispatch(syx_dispatcher_t *dispatcher, zval *resp
 		return NULL;
 	}
 
-	return_response = zend_read_property(syx_dispatcher_ce,
-			dispatcher, ZEND_STRL(SYX_DISPATCHER_PROPERTY_NAME_RETURN), 1, NULL);
+	return_response = zend_read_property(syx_dispatcher_ce, dispatcher, ZEND_STRL(SYX_DISPATCHER_PROPERTY_NAME_RETURN), 1, NULL);
 
 	if (Z_TYPE_P(return_response) == IS_FALSE) {
 		zval ret;
 		zend_call_method_with_0_params(response, Z_OBJCE_P(response), NULL, "response", &ret);
-		/* it must return bool */
-		/* zval_ptr_dtor(&ret); */
-		syx_response_clear_body(response, NULL);
+//		syx_response_clear_body(response, NULL);
 	}
 
 	return response;
@@ -1036,6 +1020,22 @@ PHP_METHOD(syx_dispatcher, getInstance) {
 }
 /* }}} */
 
+PHP_METHOD(syx_dispatcher, getSapi) {
+    syx_zval_t *sapi = zend_read_property(syx_dispatcher_ce, getThis(), ZEND_STRL(SYX_DISPATCHER_PROPERTY_NAME_SAPI), 0, NULL);
+    ZEND_ASSERT(Z_TYPE_P(sapi) == IS_STRING);
+    RETURN_STR(zend_string_copy(Z_STR_P(sapi)));
+}
+
+PHP_METHOD(syx_dispatcher, getServer) {
+    syx_server_t *server = zend_read_static_property(syx_dispatcher_ce, ZEND_STRL(SYX_DISPATCHER_PROPERTY_NAME_SERVER), 0);
+    RETURN_ZVAL(server, 1, 0);
+}
+
+PHP_METHOD(syx_dispatcher, getSwServer) {
+    syx_server_t *server = zend_read_static_property(syx_dispatcher_ce, ZEND_STRL(SYX_DISPATCHER_PROPERTY_NAME_SWOOLE_SERVER), 0);
+    RETURN_ZVAL(server, 1, 0);
+}
+
 /** {{{ proto public Syx_Dispatcher::getRouter(void)
 */
 PHP_METHOD(syx_dispatcher, getRouter) {
@@ -1080,7 +1080,6 @@ PHP_METHOD(syx_dispatcher, dispatch) {
 	if (zend_parse_parameters(ZEND_NUM_ARGS(), "O", &request, syx_request_ce) == FAILURE) {
 		return;
 	}
-
 	zend_update_property(syx_dispatcher_ce, self, ZEND_STRL(SYX_DISPATCHER_PROPERTY_NAME_REQUEST), request);
 	ZVAL_NULL(&rresponse);
 	if ((response = syx_dispatcher_dispatch(self, &rresponse))) {
@@ -1240,6 +1239,7 @@ PHP_METHOD(syx_dispatcher, setDefaultAction) {
 /** {{{ proto public Syx_Dispatcher::__desctruct(void)
 */
 PHP_METHOD(syx_dispatcher, __destruct) {
+
 }
 /* }}} */
 
@@ -1265,6 +1265,9 @@ zend_function_entry syx_dispatcher_methods[] = {
 	PHP_ME(syx_dispatcher, getRouter,			syx_dispatcher_void_arginfo, 		ZEND_ACC_PUBLIC)
 	PHP_ME(syx_dispatcher, getView,           syx_dispatcher_void_arginfo,        ZEND_ACC_PUBLIC)
 	PHP_ME(syx_dispatcher, getRequest,			syx_dispatcher_void_arginfo, 		ZEND_ACC_PUBLIC)
+	PHP_ME(syx_dispatcher, getServer,          syx_dispatcher_void_arginfo,        ZEND_ACC_PUBLIC)
+	PHP_ME(syx_dispatcher, getSwServer,          syx_dispatcher_void_arginfo,        ZEND_ACC_PUBLIC)
+	PHP_ME(syx_dispatcher, getSapi,          syx_dispatcher_void_arginfo,        ZEND_ACC_PUBLIC)
 	PHP_ME(syx_dispatcher, setErrorHandler,			syx_dispatcher_seterrhdler_arginfo, 	ZEND_ACC_PUBLIC)
 	PHP_ME(syx_dispatcher, setDefaultModule,		syx_dispatcher_setmodule_arginfo, 	ZEND_ACC_PUBLIC)
 	PHP_ME(syx_dispatcher, setDefaultController, 		syx_dispatcher_setctrl_arginfo, 	ZEND_ACC_PUBLIC)
@@ -1291,12 +1294,15 @@ SYX_STARTUP_FUNCTION(dispatcher) {
 	syx_dispatcher_ce = zend_register_internal_class_ex(&ce, NULL);
 	syx_dispatcher_ce->ce_flags |= ZEND_ACC_FINAL;
 
+	zend_declare_property_null(syx_dispatcher_ce, ZEND_STRL(SYX_DISPATCHER_PROPERTY_NAME_INSTANCE), ZEND_ACC_PROTECTED | ZEND_ACC_STATIC);
+	zend_declare_property_null(syx_dispatcher_ce, ZEND_STRL(SYX_DISPATCHER_PROPERTY_NAME_SERVER),   ZEND_ACC_PROTECTED | ZEND_ACC_STATIC);
+	zend_declare_property_null(syx_dispatcher_ce, ZEND_STRL(SYX_DISPATCHER_PROPERTY_NAME_SWOOLE_SERVER),   ZEND_ACC_PROTECTED | ZEND_ACC_STATIC);
+	zend_declare_property_string(syx_dispatcher_ce, ZEND_STRL(SYX_DISPATCHER_PROPERTY_NAME_SAPI), sapi_module.name, ZEND_ACC_PROTECTED);
 	zend_declare_property_null(syx_dispatcher_ce, ZEND_STRL(SYX_DISPATCHER_PROPERTY_NAME_ROUTER), 	ZEND_ACC_PROTECTED);
 	zend_declare_property_null(syx_dispatcher_ce, ZEND_STRL(SYX_DISPATCHER_PROPERTY_NAME_VIEW), 	ZEND_ACC_PROTECTED);
 	zend_declare_property_null(syx_dispatcher_ce, ZEND_STRL(SYX_DISPATCHER_PROPERTY_NAME_REQUEST), 	ZEND_ACC_PROTECTED);
+	zend_declare_property_null(syx_dispatcher_ce, ZEND_STRL(SYX_DISPATCHER_PROPERTY_NAME_RESPONSE),  ZEND_ACC_PROTECTED);
 	zend_declare_property_null(syx_dispatcher_ce, ZEND_STRL(SYX_DISPATCHER_PROPERTY_NAME_PLUGINS), 	ZEND_ACC_PROTECTED);
-
-	zend_declare_property_null(syx_dispatcher_ce, ZEND_STRL(SYX_DISPATCHER_PROPERTY_NAME_INSTANCE), ZEND_ACC_PROTECTED|ZEND_ACC_STATIC);
 
 	zend_declare_property_bool(syx_dispatcher_ce, ZEND_STRL(SYX_DISPATCHER_PROPERTY_NAME_RENDER),	1,  ZEND_ACC_PROTECTED);
 	zend_declare_property_bool(syx_dispatcher_ce, ZEND_STRL(SYX_DISPATCHER_PROPERTY_NAME_RETURN),   0, ZEND_ACC_PROTECTED);

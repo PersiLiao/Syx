@@ -29,9 +29,28 @@
 
 zend_class_entry * syx_response_cli_ce;
 
+/** {{{ proto public Syx_Response_Abstract::response(void)
+ */
+PHP_METHOD(response_cli, response) {
+    zval *zbody;
+    zval *val;
+
+    zbody = zend_read_property(syx_response_ce, getThis(), ZEND_STRL(SYX_RESPONSE_PROPERTY_NAME_BODY), 1, NULL);
+
+    ZEND_HASH_FOREACH_VAL(Z_ARRVAL_P(zbody), val) {
+        if (UNEXPECTED(Z_TYPE_P(val) != IS_STRING)) {
+            continue;
+        }
+        php_write(Z_STRVAL_P(val), Z_STRLEN_P(val));
+    } ZEND_HASH_FOREACH_END();
+    RETURN_TRUE;
+}
+/* }}} */
+
 /** {{{ syx_response_methods
 */
 zend_function_entry syx_response_cli_methods[] = {
+    PHP_ME(response_cli, response,      syx_response_void_arginfo,              ZEND_ACC_PUBLIC)
 	{NULL, NULL, NULL}
 };
 /* }}} */

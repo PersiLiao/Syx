@@ -35,41 +35,41 @@ zend_class_entry * syx_controller_ce;
 
 /** {{{ ARG_INFO
  */
-ZEND_BEGIN_ARG_INFO_EX(syx_controller_void_arginfo, 0, 0, 0)
-ZEND_END_ARG_INFO()
+SYX_BEGIN_ARG_INFO_EX(syx_controller_void_arginfo, 0, 0, 0)
+SYX_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(syx_controller_initview_arginfo, 0, 0, 0)
+SYX_BEGIN_ARG_INFO_EX(syx_controller_initview_arginfo, 0, 0, 0)
     ZEND_ARG_ARRAY_INFO(0, options, 1)
-ZEND_END_ARG_INFO()
+SYX_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(syx_controller_getiarg_arginfo, 0, 0, 1)
-    ZEND_ARG_INFO(0, name)
-ZEND_END_ARG_INFO()
+SYX_BEGIN_ARG_INFO_EX(syx_controller_getiarg_arginfo, 0, 0, 1)
+    SYX_ARG_INFO(0, name)
+SYX_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(syx_controller_setvdir_arginfo, 0, 0, 1)
-    ZEND_ARG_INFO(0, view_directory)
-ZEND_END_ARG_INFO()
+SYX_BEGIN_ARG_INFO_EX(syx_controller_setvdir_arginfo, 0, 0, 1)
+    SYX_ARG_INFO(0, view_directory)
+SYX_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(syx_controller_forward_arginfo, 0, 0, 1)
-    ZEND_ARG_INFO(0, module)
-    ZEND_ARG_INFO(0, controller)
-    ZEND_ARG_INFO(0, action)
+SYX_BEGIN_ARG_INFO_EX(syx_controller_forward_arginfo, 0, 0, 1)
+    SYX_ARG_INFO(0, module)
+    SYX_ARG_INFO(0, controller)
+    SYX_ARG_INFO(0, action)
     ZEND_ARG_ARRAY_INFO(0, parameters, 1)
-ZEND_END_ARG_INFO()
+SYX_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(syx_controller_redirect_arginfo, 0, 0, 1)
-    ZEND_ARG_INFO(0, url)
-ZEND_END_ARG_INFO()
+SYX_BEGIN_ARG_INFO_EX(syx_controller_redirect_arginfo, 0, 0, 1)
+    SYX_ARG_INFO(0, url)
+SYX_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(syx_controller_render_arginfo, 0, 0, 1)
-    ZEND_ARG_INFO(0, tpl)
+SYX_BEGIN_ARG_INFO_EX(syx_controller_render_arginfo, 0, 0, 1)
+    SYX_ARG_INFO(0, tpl)
     ZEND_ARG_ARRAY_INFO(0, parameters, 1)
-ZEND_END_ARG_INFO()
+SYX_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(syx_controller_display_arginfo, 0, 0, 1)
-    ZEND_ARG_INFO(0, tpl)
+SYX_BEGIN_ARG_INFO_EX(syx_controller_display_arginfo, 0, 0, 1)
+    SYX_ARG_INFO(0, tpl)
     ZEND_ARG_ARRAY_INFO(0, parameters, 1)
-ZEND_END_ARG_INFO()
+SYX_END_ARG_INFO()
 /* }}} */
 
 zend_string * syx_controller_render(syx_controller_t *instance, char *action_name, int len, zval *var_array) /* {{{ */ {

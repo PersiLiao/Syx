@@ -37,34 +37,34 @@ extern PHPAPI zend_class_entry *spl_ce_Countable;
 
 /** {{{ ARG_INFO
  */
-ZEND_BEGIN_ARG_INFO_EX(syx_config_ini_void_arginfo, 0, 0, 0)
-ZEND_END_ARG_INFO()
+SYX_BEGIN_ARG_INFO_EX(syx_config_ini_void_arginfo, 0, 0, 0)
+SYX_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(syx_config_ini_construct_arginfo, 0, 0, 1)
-	ZEND_ARG_INFO(0, config_file)
-	ZEND_ARG_INFO(0, section)
-ZEND_END_ARG_INFO()
+SYX_BEGIN_ARG_INFO_EX(syx_config_ini_construct_arginfo, 0, 0, 1)
+	SYX_ARG_INFO(0, config_file)
+	SYX_ARG_INFO(0, section)
+SYX_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(syx_config_ini_get_arginfo, 0, 0, 0)
-	ZEND_ARG_INFO(0, name)
-ZEND_END_ARG_INFO()
+SYX_BEGIN_ARG_INFO_EX(syx_config_ini_get_arginfo, 0, 0, 0)
+	SYX_ARG_INFO(0, name)
+SYX_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(syx_config_ini_rget_arginfo, 0, 0, 1)
-	ZEND_ARG_INFO(0, name)
-ZEND_END_ARG_INFO()
+SYX_BEGIN_ARG_INFO_EX(syx_config_ini_rget_arginfo, 0, 0, 1)
+	SYX_ARG_INFO(0, name)
+SYX_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(syx_config_ini_unset_arginfo, 0, 0, 1)
-	ZEND_ARG_INFO(0, name)
-ZEND_END_ARG_INFO()
+SYX_BEGIN_ARG_INFO_EX(syx_config_ini_unset_arginfo, 0, 0, 1)
+	SYX_ARG_INFO(0, name)
+SYX_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(syx_config_ini_set_arginfo, 0, 0, 2)
-	ZEND_ARG_INFO(0, name)
-	ZEND_ARG_INFO(0, value)
-ZEND_END_ARG_INFO()
+SYX_BEGIN_ARG_INFO_EX(syx_config_ini_set_arginfo, 0, 0, 2)
+	SYX_ARG_INFO(0, name)
+	SYX_ARG_INFO(0, value)
+SYX_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(syx_config_ini_isset_arginfo, 0, 0, 1)
-	ZEND_ARG_INFO(0, name)
-ZEND_END_ARG_INFO()
+SYX_BEGIN_ARG_INFO_EX(syx_config_ini_isset_arginfo, 0, 0, 1)
+	SYX_ARG_INFO(0, name)
+SYX_END_ARG_INFO()
 /* }}} */
 
 /** {{{ static inline syx_deep_copy_section(zval *dst, zval *src)
