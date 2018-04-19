@@ -118,7 +118,7 @@ PHP_METHOD(syx_response_swoole_http, response) {
 /* }}} */
 
 PHP_METHOD(syx_response_swoole_http, setGzipLevel){
-    syx_response_t *level;
+    zend_long *level;
     if(zend_parse_parameters_throw(ZEND_NUM_ARGS(), "l", &level) == FAILURE){
         return;
     }

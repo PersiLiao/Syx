@@ -30,13 +30,20 @@
 #include "syx_bootstrap.h"
 #include "syx_exception.h"
 
+#include "syx_request.h"
+#include "requests/syx_request_swoole_http.h"
+#include "requests/syx_request_swoole_websocket.h"
+
+#include "syx_response.h"
+#include "responses/syx_response_swoole_http.h"
+#include "responses/syx_response_swoole_websocket.h"
+
 #include "syx_server.h"
 #include "server/syx_server_interface.h"
 #include "server/syx_server_plugin.h"
 #include "server/syx_server_tcp.h"
 #include "server/syx_server_http.h"
 #include "server/syx_server_websocket.h"
-#include "requests/syx_request_swoole_websocket.h"
 
 zend_class_entry *syx_server_websocket_ce;
 

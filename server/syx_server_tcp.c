@@ -30,10 +30,18 @@
 #include "syx_dispatcher.h"
 #include "syx_exception.h"
 
+#include "syx_request.h"
+#include "requests/syx_request_swoole_tcp.h"
+
+#include "syx_response.h"
+#include "responses/syx_response_swoole_tcp.h"
+
 #include "syx_server.h"
 #include "server/syx_server_interface.h"
 #include "server/syx_server_plugin.h"
 #include "server/syx_server_tcp.h"
+
+
 
 zend_class_entry *syx_server_tcp_ce;
 

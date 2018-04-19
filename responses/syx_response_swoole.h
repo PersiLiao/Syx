@@ -22,6 +22,6 @@
 
 extern zend_class_entry *syx_response_swoole_ce;
 
-SYX_STARTUP_FUNCTION(response_swoole);
+SYX_STARTUP_FUNCTION(response_swoole_websocket);
 
 #endif /* SYX_RESPONSE_SWOOLE_H_ */

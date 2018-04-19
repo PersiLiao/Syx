@@ -20,6 +20,8 @@
 extern zend_class_entry *syx_response_swoole_tcp_ce;
 
 syx_response_t* syx_response_swoole_tcp_instance(syx_response_t *this_ptr, syx_response_t *fd);
+
 SYX_STARTUP_FUNCTION(response_swoole_tcp);
+
 
 #endif /* SYX_SERVER_RESPONSE_TCP_H_ */

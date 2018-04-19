@@ -24,6 +24,7 @@
 #include "syx_namespace.h"
 #include "syx_exception.h"
 #include "syx_request.h"
+#include "requests/syx_request_http.h"
 
 #include "syx_router.h"
 #include "routes/syx_route_interface.h"

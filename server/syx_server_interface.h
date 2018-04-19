@@ -137,6 +137,6 @@ SYX_BEGIN_ARG_INFO_EX(syx_server_interface_message_arginfo, 0, 0, 2)
     SYX_ARG_OBJ_INFO(0, message, Swoole\\Websocket\\Frame, 0)
 SYX_END_ARG_INFO()
 
-SYX_STARTUP_FUNCTION(server);
+SYX_STARTUP_FUNCTION(server_interface);
 
 #endif /* SYX_SERVER_INTERFACE_H_ */

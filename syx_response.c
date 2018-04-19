@@ -122,7 +122,9 @@ static int syx_response_set_body(syx_response_t *response, char *name, int name_
 	response_ce = Z_OBJCE_P(response);
 
 	zbody = zend_read_property(response_ce, response, ZEND_STRL(SYX_RESPONSE_PROPERTY_NAME_BODY), 1, NULL);
-	zval_ptr_dtor(&zbody);
+	if(!ZVAL_IS_NULL(zbody)){
+	    zval_ptr_dtor(&zbody);
+	}
 	ZVAL_STRINGL(zbody, body, body_len);
 	zend_update_property(response_ce, response, ZEND_STRL(SYX_RESPONSE_PROPERTY_NAME_BODY), zbody);
 	zval_ptr_dtor(zbody);
@@ -239,7 +241,7 @@ zval * syx_response_get_body_str(syx_response_t *response, char *name, size_t le
 /** {{{ proto private Syx_Response_Abstract::__construct()
 */
 PHP_METHOD(syx_response, __construct) {
-	(void)syx_response_instance(getThis(), sapi_module.name);
+	(void)syx_response_instance(zend_read_static_property(syx_dispatcher_ce, ZEND_STRL(SYX_DISPATCHER_PROPERTY_NAME_INSTANCE), 0), getThis());
 }
 /* }}} */
 

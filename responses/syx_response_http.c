@@ -219,7 +219,7 @@ PHP_METHOD(syx_response_http, setRedirect) {
 /* }}} */
 
 PHP_METHOD(syx_response_http, setResponseCode) {
-    syx_response_t *code;
+    zend_long *code;
     if (zend_parse_parameters_throw(ZEND_NUM_ARGS(), "l", &code) == FAILURE) {
         return;
     }

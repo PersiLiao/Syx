@@ -23,6 +23,7 @@
 #define SYX_REQUEST_PROPERTY_NAME_DATA "_data"
 
 extern zend_class_entry* syx_request_swoole_tcp_ce;
+syx_request_t *syx_request_swoole_tcp_instance(syx_request_t *this_ptr, syx_request_t *fd, syx_request_t *reactor_id, syx_request_t *data);
 
 SYX_STARTUP_FUNCTION(request_swoole_tcp);
 

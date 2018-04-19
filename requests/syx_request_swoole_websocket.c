@@ -31,6 +31,7 @@
 #include "syx_exception.h"
 
 #include "syx_request.h"
+#include "requests/syx_request_http.h"
 #include "requests/syx_request_swoole_tcp.h"
 #include "requests/syx_request_swoole_http.h"
 #include "requests/syx_request_swoole_websocket.h"
@@ -94,7 +95,7 @@ PHP_METHOD(syx_request_swoole_websocket, __construct){
     if (zend_parse_parameters_throw(ZEND_NUM_ARGS(), "O", &swoole_websocket_frame) == FAILURE) {
         RETURN_FALSE;
     }
-    (void)syx_request_swoole_swoole_instance(getThis(), swoole_websocket_frame);
+    (void)syx_request_swoole_websocket_instance(getThis(), swoole_websocket_frame);
     RETURN_TRUE;
 }
 

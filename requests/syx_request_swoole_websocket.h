@@ -48,6 +48,6 @@ enum syx_websocket_opcode
 extern zend_class_entry* syx_request_swoole_websocket_ce;
 syx_request_t *syx_request_swoole_websocket_instance(syx_request_t *this_ptr, syx_request_t *swoole_websocket_frame);
 
-SYX_STARTUP_FUNCTION(server_request_websocket);
+SYX_STARTUP_FUNCTION(request_swoole_websocket);
 
 #endif /* SYX_REQUEST_SERVER_WEBSOCKET_H_ */

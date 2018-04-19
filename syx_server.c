@@ -76,7 +76,7 @@ void syx_server_swoole_on(syx_server_t *syx_swoole_server_o, const char* event_n
     zend_call_method_with_2_params(syx_swoole_server_o, Z_OBJCE_P(syx_swoole_server_o), NULL, "on", &retval, &params[0], &params[1]);
     zval_ptr_dtor(params);
     zval_ptr_dtor(&func_name);
-    if(&retval){
+    if(Z_REFCOUNTED_P(&retval) && !Z_DELREF_P(&retval)){
         zval_ptr_dtor(&retval);
     }
 }
@@ -92,19 +92,20 @@ void syx_server_swoole_server_construct(syx_server_t *syx_swoole_server_o, syx_s
 
     ZVAL_STRING(&func_name, "__construct");
     call_user_function(NULL, syx_swoole_server_o, &func_name, &retval, 4, construct_params);
-    if(&retval){
-        zval_ptr_dtor(&retval);
-    }
     zval_ptr_dtor(construct_params);
     syx_server_set = syx_server_get_server_option_key(ZEND_STRL("set"));
     if(UNEXPECTED(syx_server_set == NULL)){
         return;
     }
+    if(UNEXPECTED(Z_TYPE_P(syx_server_set) != IS_ARRAY && Z_TYPE_P(syx_server_set) != IS_OBJECT)){
+        syx_trigger_error(SYX_ERR_STARTUP_FAILED, "Server config must be a array");
+        return;
+    }
     ZVAL_COPY(&set_params[0], syx_server_set);
     ZVAL_STRING(&func_name, "set");
-    zend_call_method_with_1_params(syx_swoole_server_o, Z_OBJCE_P(syx_swoole_server_o), NULL, "set", &retval_x, set_params);
-    if(&retval_x){
-        zval_ptr_dtor(&retval_x);
+    zend_call_method_with_1_params(syx_swoole_server_o, Z_OBJCE_P(syx_swoole_server_o), NULL, "set", &retval, set_params);
+    if(Z_REFCOUNTED_P(&retval) && !Z_DELREF_P(&retval)){
+        zval_ptr_dtor(&retval);
     }
     zval_ptr_dtor(set_params);
     zval_ptr_dtor(&func_name);
@@ -114,7 +115,7 @@ void syx_server_swoole_server_construct(syx_server_t *syx_swoole_server_o, syx_s
 void syx_server_destruct(syx_dispatcher_t *dispatcher, syx_request_t *request, syx_response_t *response){
     syx_router_t *router, rv = {{0}};
 
-    if(Z_REFCOUNTED_P(request)){
+    if(Z_REFCOUNTED_P(request) && !Z_DELREF_P(request)){
         zval_ptr_dtor(request);
     }
 
@@ -141,7 +142,7 @@ void syx_server_destruct(syx_dispatcher_t *dispatcher, syx_request_t *request, s
             dispatcher, ZEND_STRL(SYX_DISPATCHER_PROPERTY_NAME_CONTROLLER), SYX_G(default_controller));
     zend_update_property_str(syx_dispatcher_ce,
             dispatcher, ZEND_STRL(SYX_DISPATCHER_PROPERTY_NAME_ACTION), SYX_G(default_action));
-    SYX_G(in_exception) == 0;
+    SYX_G(in_exception) = 0;
 }
 
 zend_class_entry* syx_server_get_swoole_server_ce(const char *class_name, size_t name_len){
@@ -206,7 +207,7 @@ void syx_server_start(syx_server_t *syx_server_o, syx_server_t *syx_swoole_serve
     ZVAL_STRING(&func_name, "start");
     call_user_function(NULL, syx_swoole_server_o, &func_name, &retval, 0, NULL);
     zval_ptr_dtor(&func_name);
-    if(&retval){
+    if(Z_REFCOUNTED_P(&retval) && !Z_DELREF_P(&retval)){
         zval_ptr_dtor(&retval);
     }
 }
