@@ -561,7 +561,6 @@ int syx_dispatcher_handle(syx_dispatcher_t *dispatcher, syx_request_t *request, 
 							NULL, ZSTR_VAL(func_name), ZSTR_LEN(func_name), &ret, 0, NULL, NULL);
 				}
 				zend_string_release(func_name);
-
 				if (Z_ISUNDEF(ret)) {
 					zval_ptr_dtor(&action);
 					zval_ptr_dtor(executor);
@@ -695,7 +694,6 @@ void syx_dispatcher_exception_handler(syx_dispatcher_t *dispatcher, syx_request_
 	}
 
 	SYX_G(in_exception) = 1;
-
 	module = zend_read_property(syx_request_ce, request, ZEND_STRL(SYX_REQUEST_PROPERTY_NAME_MODULE), 1, NULL);
 
 	if (Z_TYPE_P(module) != IS_STRING || !Z_STRLEN_P(module)) {
@@ -752,8 +750,13 @@ void syx_dispatcher_exception_handler(syx_dispatcher_t *dispatcher, syx_request_
 			(void)syx_dispatcher_handle(dispatcher, request, response, view);
 		}
 	}
+	syx_zval_t *return_response;
+	return_response = zend_read_property(syx_dispatcher_ce, dispatcher, ZEND_STRL(SYX_DISPATCHER_PROPERTY_NAME_RETURN), 1, NULL);
 
-//	(void)syx_response_send(response);
+    if (Z_TYPE_P(return_response) == IS_FALSE) {
+        zval ret;
+        zend_call_method_with_0_params(response, Z_OBJCE_P(response), NULL, "response", &ret);
+    }
 
 	EG(opline_before_exception) = opline;
 	SYX_EXCEPTION_ERASE_EXCEPTION();

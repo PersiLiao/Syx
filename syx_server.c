@@ -27,9 +27,9 @@
 #include "syx_loader.h"
 #include "syx_application.h"
 #include "syx_dispatcher.h"
+#include "syx_response.h"
 #include "syx_router.h"
 #include "syx_bootstrap.h"
-#include "syx_dispatcher.h"
 #include "syx_exception.h"
 
 #include "syx_server.h"
@@ -114,8 +114,15 @@ void syx_server_swoole_server_construct(syx_server_t *syx_swoole_server_o, syx_s
 void syx_server_destruct(syx_dispatcher_t *dispatcher, syx_request_t *request, syx_response_t *response){
     syx_router_t *router, rv = {{0}};
 
-    zval_ptr_dtor(request);
-    zval_ptr_dtor(response);
+    if(Z_REFCOUNTED_P(request)){
+        zval_ptr_dtor(request);
+    }
+
+    if(Z_REFCOUNTED_P(response) && !Z_DELREF_P(response)){
+        zval_ptr_dtor(response);
+    }
+
+    SYX_G(in_exception) = 0;
 
     if(Z_TYPE_P(dispatcher) != IS_OBJECT){
         syx_trigger_error(SYX_ERR_TYPE_ERROR, "Must be a %s instance", ZSTR_VAL(syx_dispatcher_ce->name));
@@ -134,6 +141,7 @@ void syx_server_destruct(syx_dispatcher_t *dispatcher, syx_request_t *request, s
             dispatcher, ZEND_STRL(SYX_DISPATCHER_PROPERTY_NAME_CONTROLLER), SYX_G(default_controller));
     zend_update_property_str(syx_dispatcher_ce,
             dispatcher, ZEND_STRL(SYX_DISPATCHER_PROPERTY_NAME_ACTION), SYX_G(default_action));
+    SYX_G(in_exception) == 0;
 }
 
 zend_class_entry* syx_server_get_swoole_server_ce(const char *class_name, size_t name_len){

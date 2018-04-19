@@ -139,6 +139,7 @@ PHP_MSHUTDOWN_FUNCTION(syx)
 PHP_RINIT_FUNCTION(syx)
 {
 	SYX_G(throw_exception) = 1;
+	SYX_G(catch_exception) = 1;
 	SYX_G(ext) = zend_string_init(SYX_DEFAULT_EXT, sizeof(SYX_DEFAULT_EXT) - 1, 0);
 	SYX_G(view_ext) = zend_string_init(SYX_DEFAULT_VIEW_EXT, sizeof(SYX_DEFAULT_VIEW_EXT) - 1, 0);
 	SYX_G(default_module) = zend_string_init(
