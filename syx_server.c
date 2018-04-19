@@ -115,15 +115,13 @@ void syx_server_swoole_server_construct(syx_server_t *syx_swoole_server_o, syx_s
 void syx_server_destruct(syx_dispatcher_t *dispatcher, syx_request_t *request, syx_response_t *response){
     syx_router_t *router, rv = {{0}};
 
-    if(Z_REFCOUNTED_P(request) && !Z_DELREF_P(request)){
+    if(Z_TYPE_P(request) != IS_UNDEF && Z_GC_INFO_P(request)){
         zval_ptr_dtor(request);
     }
 
-    if(Z_REFCOUNTED_P(response) && !Z_DELREF_P(response)){
+    if(Z_TYPE_P(response) != IS_UNDEF && Z_GC_INFO_P(response)){
         zval_ptr_dtor(response);
     }
-
-    SYX_G(in_exception) = 0;
 
     if(Z_TYPE_P(dispatcher) != IS_OBJECT){
         syx_trigger_error(SYX_ERR_TYPE_ERROR, "Must be a %s instance", ZSTR_VAL(syx_dispatcher_ce->name));
