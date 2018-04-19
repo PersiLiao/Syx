@@ -2,6 +2,7 @@
 *.lo
 *.la
 .libs
+*.loT
 acinclude.m4
 aclocal.m4
 autom4te.cache
@@ -34,3 +35,5 @@ tests/*/*.php
 tests/*/*.exp
 tests/*/*.log
 tests/*/*.sh
+CMakeLists.txt
+cmake-build-debug

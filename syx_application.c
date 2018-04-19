@@ -37,44 +37,44 @@ zend_class_entry * syx_application_ce;
 
 /** {{{ ARG_INFO
  *  */
-ZEND_BEGIN_ARG_INFO_EX(syx_application_void_arginfo, 0, 0, 0)
-ZEND_END_ARG_INFO()
+SYX_BEGIN_ARG_INFO_EX(syx_application_void_arginfo, 0, 0, 0)
+SYX_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(syx_application_construct_arginfo, 0, 0, 1)
-	ZEND_ARG_INFO(0, config)
-	ZEND_ARG_INFO(0, environ)
-ZEND_END_ARG_INFO()
+SYX_BEGIN_ARG_INFO_EX(syx_application_construct_arginfo, 0, 0, 1)
+	SYX_ARG_INFO(0, config)
+	SYX_ARG_INFO(0, environ)
+SYX_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(syx_application_app_arginfo, 0, 0, 0)
-ZEND_END_ARG_INFO()
+SYX_BEGIN_ARG_INFO_EX(syx_application_app_arginfo, 0, 0, 0)
+SYX_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(syx_application_execute_arginfo, 0, 0, 2)
-	ZEND_ARG_INFO(0, entry)
-	ZEND_ARG_INFO(0, ...)
-ZEND_END_ARG_INFO()
+SYX_BEGIN_ARG_INFO_EX(syx_application_execute_arginfo, 0, 0, 2)
+	SYX_ARG_INFO(0, entry)
+	SYX_ARG_INFO(0, ...)
+SYX_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(syx_application_getconfig_arginfo, 0, 0, 0)
-ZEND_END_ARG_INFO()
+SYX_BEGIN_ARG_INFO_EX(syx_application_getconfig_arginfo, 0, 0, 0)
+SYX_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(syx_application_getmodule_arginfo, 0, 0, 0)
-ZEND_END_ARG_INFO()
+SYX_BEGIN_ARG_INFO_EX(syx_application_getmodule_arginfo, 0, 0, 0)
+SYX_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(syx_application_getdispatch_arginfo, 0, 0, 0)
-ZEND_END_ARG_INFO()
+SYX_BEGIN_ARG_INFO_EX(syx_application_getdispatch_arginfo, 0, 0, 0)
+SYX_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(syx_application_bootstrap_arginfo, 0, 0, 0)
-	ZEND_ARG_INFO(0, bootstrap)
-ZEND_END_ARG_INFO()
+SYX_BEGIN_ARG_INFO_EX(syx_application_bootstrap_arginfo, 0, 0, 0)
+	SYX_ARG_INFO(0, bootstrap)
+SYX_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(syx_application_environ_arginfo, 0, 0, 0)
-ZEND_END_ARG_INFO()
+SYX_BEGIN_ARG_INFO_EX(syx_application_environ_arginfo, 0, 0, 0)
+SYX_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(syx_application_run_arginfo, 0, 0, 0)
-ZEND_END_ARG_INFO()
+SYX_BEGIN_ARG_INFO_EX(syx_application_run_arginfo, 0, 0, 0)
+SYX_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(syx_application_setappdir_arginfo, 0, 0, 1)
-	ZEND_ARG_INFO(0, directory)
-ZEND_END_ARG_INFO()
+SYX_BEGIN_ARG_INFO_EX(syx_application_setappdir_arginfo, 0, 0, 1)
+	SYX_ARG_INFO(0, directory)
+SYX_END_ARG_INFO()
 /* }}} */
 
 int syx_application_is_module_name(zend_string *name) /* {{{ */ {
@@ -111,7 +111,7 @@ int syx_application_is_module_name_str(char *name, size_t len) /* {{{ */ {
 }
 /* }}} */
 
-static int syx_application_parse_option(zval *options) /* {{{ */ {
+int syx_application_parse_option(zval *options) /* {{{ */ {
 	HashTable *conf;
 	zval *pzval, *psval, *app;
 
@@ -146,7 +146,6 @@ static int syx_application_parse_option(zval *options) /* {{{ */ {
 		SYX_G(ext) = zend_string_copy(Z_STR_P(pzval));
 	}
 
-	// TODO 2 添加namespace命名空间
 	if (UNEXPECTED((pzval = zend_hash_str_find(Z_ARRVAL_P(app),
 							ZEND_STRL("namespace"))) != NULL && Z_TYPE_P(pzval) == IS_STRING)) {
 		SYX_G(namespace) = zend_string_copy(Z_STR_P(pzval));
@@ -306,14 +305,13 @@ PHP_METHOD(syx_application, __construct) {
 	syx_dispatcher_t zdispatcher = {{0}};
 	syx_application_t *app, *self;
 	syx_loader_t *loader, zloader = {{0}};
-
 #if PHP_SYX_DEBUG
 	php_error_docref(NULL, E_STRICT, "Syx is running in debug mode");
 #endif
 
 	if (zend_parse_parameters_throw(ZEND_NUM_ARGS(), "z|z", &config, &section) == FAILURE) {
-		return;
-	}
+        return;
+    }
 
 	app	= zend_read_static_property(syx_application_ce, ZEND_STRL(SYX_APPLICATION_PROPERTY_NAME_APP), 1);
 
@@ -328,7 +326,7 @@ PHP_METHOD(syx_application, __construct) {
 		(void)syx_config_instance(&zconfig, config, &zsection);
 		zval_ptr_dtor(&zsection);
 	} else {
-		SYX_G(environ_name) = Z_STRVAL_P(section); // TODO 1 修复Application 返回environ值问题
+		SYX_G(environ_name) = Z_STRVAL_P(section);
 		(void)syx_config_instance(&zconfig, config, section);
 	}
 
@@ -356,7 +354,6 @@ PHP_METHOD(syx_application, __construct) {
 	zval_ptr_dtor(&zrequest);
 
 	zend_update_property(syx_application_ce, self, ZEND_STRL(SYX_APPLICATION_PROPERTY_NAME_CONFIG), &zconfig);
-	zend_update_property(syx_application_ce, self, ZEND_STRL(SYX_APPLICATION_PROPERTY_NAME_DISPATCHER), &zdispatcher);
 
 	zval_ptr_dtor(&zdispatcher);
 	zval_ptr_dtor(&zconfig);
@@ -438,12 +435,9 @@ PHP_METHOD(syx_application, run) {
 		syx_trigger_error(SYX_ERR_STARTUP_FAILED, "An application instance already run");
 		RETURN_TRUE;
 	}
-
 	ZVAL_BOOL(running, 1);
-
-	dispatcher = zend_read_property(syx_application_ce, self,
-			ZEND_STRL(SYX_APPLICATION_PROPERTY_NAME_DISPATCHER), 1, NULL);
 	ZVAL_NULL(&rresponse);
+	dispatcher = zend_read_static_property(syx_dispatcher_ce, ZEND_STRL(SYX_DISPATCHER_PROPERTY_NAME_INSTANCE), 0);
 	if ((response = syx_dispatcher_dispatch(dispatcher, &rresponse))) {
 		RETURN_ZVAL(response, 1, 1);
 	}
@@ -495,8 +489,8 @@ PHP_METHOD(syx_application, getConfig) {
 /** {{{ proto public Syx_Application::getDispatcher(void)
 */
 PHP_METHOD(syx_application, getDispatcher) {
-	syx_dispatcher_t *dispatcher = zend_read_property(syx_application_ce,
-			getThis(), ZEND_STRL(SYX_APPLICATION_PROPERTY_NAME_DISPATCHER), 1, NULL);
+	syx_dispatcher_t *dispatcher = zend_read_static_property(syx_dispatcher_ce,
+			ZEND_STRL(SYX_DISPATCHER_PROPERTY_NAME_INSTANCE), 0);
 	RETURN_ZVAL(dispatcher, 1, 0);
 }
 /* }}} */
@@ -528,8 +522,7 @@ PHP_METHOD(syx_application, bootstrap) {
 	zend_class_entry  *ce;
 	syx_application_t *self = getThis();
 
-	if (!(ce = zend_hash_str_find_ptr(EG(class_table),
-					SYX_DEFAULT_BOOTSTRAP_LOWER, sizeof(SYX_DEFAULT_BOOTSTRAP_LOWER) - 1))) {
+	if (!(ce = zend_hash_str_find_ptr(EG(class_table), ZEND_STRL(SYX_DEFAULT_BOOTSTRAP_LOWER)))) {
 		if (SYX_G(bootstrap)) {
 			bootstrap_path = zend_string_copy(SYX_G(bootstrap));
 		} else {
@@ -537,30 +530,28 @@ PHP_METHOD(syx_application, bootstrap) {
 					ZSTR_VAL(SYX_G(directory)), DEFAULT_SLASH, SYX_DEFAULT_BOOTSTRAP, ZSTR_VAL(SYX_G(ext)));
 		}
 		if (!syx_loader_import(bootstrap_path, 0)) {
-			php_error_docref(NULL, E_WARNING, "Couldn't find bootstrap file %s", ZSTR_VAL(bootstrap_path));
+		    php_error_docref(NULL, E_WARNING, "Couldn't find bootstrap file %s", ZSTR_VAL(bootstrap_path));
 			retval = 0;
 		} else if (UNEXPECTED((ce = zend_hash_str_find_ptr(EG(class_table),
 						SYX_DEFAULT_BOOTSTRAP_LOWER, sizeof(SYX_DEFAULT_BOOTSTRAP_LOWER) - 1)) == NULL)) {
-			php_error_docref(NULL, E_WARNING, "Couldn't find class %s in %s", SYX_DEFAULT_BOOTSTRAP, ZSTR_VAL(bootstrap_path));
+            php_error_docref(NULL, E_WARNING, "Couldn't find class %s in %s", SYX_DEFAULT_BOOTSTRAP, ZSTR_VAL(bootstrap_path));
 			retval = 0;
 		} else if (UNEXPECTED(!instanceof_function(ce, syx_bootstrap_ce))) {
-			php_error_docref(NULL, E_WARNING,
-					"Expect a %s instance, %s give", ZSTR_VAL(syx_bootstrap_ce->name), ZSTR_VAL(ce->name));
+		    php_error_docref(NULL, E_WARNING, "Expect a %s instance, %s give", ZSTR_VAL(syx_bootstrap_ce->name), ZSTR_VAL(ce->name));
 			retval = 0;
 		}
 		zend_string_release(bootstrap_path);
 	}
 
 	if (UNEXPECTED(!retval)) {
-		RETURN_FALSE;
+	    RETURN_ZVAL(self, 1, 0);
 	} else {
 		zend_string *func;
 		zval bootstrap;
 		syx_dispatcher_t *dispatcher;
 
 		object_init_ex(&bootstrap, ce);
-		dispatcher = zend_read_property(syx_application_ce,
-				self, ZEND_STRL(SYX_APPLICATION_PROPERTY_NAME_DISPATCHER), 1, NULL);
+		dispatcher = zend_read_static_property(syx_dispatcher_ce, ZEND_STRL(SYX_DISPATCHER_PROPERTY_NAME_INSTANCE), 0);
 
 		ZEND_HASH_FOREACH_STR_KEY(&(ce->function_table), func) {
 			/* cann't use ZEND_STRL in strncasecmp, it cause a compile failed in VS2009 */
@@ -676,8 +667,6 @@ SYX_STARTUP_FUNCTION(application) {
 
 	zend_declare_property_null(syx_application_ce,
 			ZEND_STRL(SYX_APPLICATION_PROPERTY_NAME_CONFIG), ZEND_ACC_PROTECTED);
-	zend_declare_property_null(syx_application_ce,
-			ZEND_STRL(SYX_APPLICATION_PROPERTY_NAME_DISPATCHER), ZEND_ACC_PROTECTED);
 	zend_declare_property_null(syx_application_ce,
 			ZEND_STRL(SYX_APPLICATION_PROPERTY_NAME_APP), ZEND_ACC_STATIC | ZEND_ACC_PROTECTED);
 	zend_declare_property_null(syx_application_ce,

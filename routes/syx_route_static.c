@@ -35,9 +35,9 @@ zend_class_entry * syx_route_static_ce;
 
 /** {{{ ARG_INFO
  */
-ZEND_BEGIN_ARG_INFO_EX(syx_route_static_match_arginfo, 0, 0, 1)
-	ZEND_ARG_INFO(0, uri)
-ZEND_END_ARG_INFO()
+SYX_BEGIN_ARG_INFO_EX(syx_route_static_match_arginfo, 0, 0, 1)
+	SYX_ARG_INFO(0, uri)
+SYX_END_ARG_INFO()
 /* }}} */
 
 int syx_route_pathinfo_route(syx_request_t *request, zend_string *req_uri) /* {{{ */ {

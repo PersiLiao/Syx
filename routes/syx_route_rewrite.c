@@ -37,11 +37,11 @@ zend_class_entry *syx_route_rewrite_ce;
 
 /** {{{ ARG_INFO
  */
-ZEND_BEGIN_ARG_INFO_EX(syx_route_rewrite_construct_arginfo, 0, 0, 2)
-	ZEND_ARG_INFO(0, match)
+SYX_BEGIN_ARG_INFO_EX(syx_route_rewrite_construct_arginfo, 0, 0, 2)
+	SYX_ARG_INFO(0, match)
 	ZEND_ARG_ARRAY_INFO(0, route, 0)
 	ZEND_ARG_ARRAY_INFO(0, verify, 1)
-ZEND_END_ARG_INFO()
+SYX_END_ARG_INFO()
 /* }}} */
 
 syx_route_t * syx_route_rewrite_instance(syx_route_t *this_ptr, zval *match, zval *route, zval *verify) /* {{{ */ {

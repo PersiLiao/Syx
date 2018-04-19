@@ -22,31 +22,14 @@
 
 #define SYX_LIBRARY_DIRECTORY_NAME    		"library"
 #define SYX_CONTROLLER_DIRECTORY_NAME 		"controller"
-#define SYX_PLUGIN_DIRECTORY_NAME 	  		"plugin"
-#define SYX_MODULE_DIRECTORY_NAME     		"module"
-#define SYX_VIEW_DIRECTORY_NAME       		"view"
-#define SYX_MODEL_DIRECTORY_NAME      		"model"
 
 #define SYX_SPL_AUTOLOAD_REGISTER_NAME 		"spl_autoload_register"
 #define SYX_AUTOLOAD_FUNC_NAME 				"autoload"
 #define SYX_LOADER_PROPERTY_NAME_INSTANCE	"_instance"
 #define SYX_LOADER_PROPERTY_NAME_NAMESPACE	"_local_ns"
 
-#define SYX_LOADER_CONTROLLER				"Controller"
-#define SYX_LOADER_LEN_CONTROLLER			10
-#define SYX_LOADER_MODEL					"Model"
-#define SYX_LOADER_LEN_MODEL				5
-#define SYX_LOADER_PLUGIN					"Plugin"
-#define SYX_LOADER_LEN_PLUGIN				6
-#define SYX_LOADER_RESERVERD				"Syx_"
+#define SYX_LOADER_RESERVERD				"Syx"
 #define SYX_LOADER_LEN_RESERVERD			3
-
-/* {{{ This only effects internally */
-#define SYX_LOADER_DAO						"Dao_"
-#define SYX_LOADER_LEN_DAO					4
-#define SYX_LOADER_SERVICE					"Service_"
-#define SYX_LOADER_LEN_SERVICE				8
-/* }}} */
 
 #define	SYX_LOADER_PROPERTY_NAME_LIBRARY	"_library"
 #define SYX_LOADER_PROPERTY_NAME_GLOBAL_LIB "_global_library"

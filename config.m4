@@ -57,9 +57,16 @@ if test "$PHP_SYX" != "no"; then
     syx_request.c                   \
     requests/syx_request_http.c     \
     requests/syx_request_simple.c   \
+    requests/syx_request_swoole_tcp.c   \
+    requests/syx_request_swoole_http.c   \
+    requests/syx_request_swoole_websocket.c   \
     syx_response.c                  \
     responses/syx_response_http.c   \
     responses/syx_response_cli.c    \
+    responses/syx_response_swoole.c   \
+    responses/syx_response_swoole_tcp.c   \
+    responses/syx_response_swoole_http.c   \
+    responses/syx_response_swoole_websocket.c   \
     syx_view.c                      \
     views/syx_view_interface.c      \
     views/syx_view_simple.c         \
@@ -76,6 +83,14 @@ if test "$PHP_SYX" != "no"; then
     syx_loader.c                    \
     syx_registry.c                  \
     syx_plugin.c                    \
+    server/syx_server_interface.c   \
+    server/syx_server_http.c        \
+    server/syx_server_plugin.c      \
+    server/syx_server_rpc.c         \
+    server/syx_server_tcp.c         \
+    server/syx_server_udp.c         \
+    server/syx_server_websocket.c   \
+    syx_server.c                    \
     syx_session.c,
   $ext_shared)
   PHP_ADD_BUILD_DIR([$ext_builddir/configs])
@@ -83,4 +98,5 @@ if test "$PHP_SYX" != "no"; then
   PHP_ADD_BUILD_DIR([$ext_builddir/responses])
   PHP_ADD_BUILD_DIR([$ext_builddir/views])
   PHP_ADD_BUILD_DIR([$ext_builddir/routes])
+  PHP_ADD_BUILD_DIR([$ext_builddir/server])
 fi

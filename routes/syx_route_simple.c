@@ -25,6 +25,7 @@
 #include "syx_exception.h"
 #include "syx_application.h" /* for syx_application_is_module_name */
 #include "syx_request.h"
+#include "requests/syx_request_http.h"
 #include "syx_router.h"
 
 #include "routes/syx_route_interface.h"
@@ -35,11 +36,11 @@ zend_class_entry *syx_route_simple_ce;
 
 /** {{{ ARG_INFO
  */
-ZEND_BEGIN_ARG_INFO_EX(syx_route_simple_construct_arginfo, 0, 0, 3)
-	ZEND_ARG_INFO(0, module_name)
-    ZEND_ARG_INFO(0, controller_name)
-    ZEND_ARG_INFO(0, action_name)
-ZEND_END_ARG_INFO()
+SYX_BEGIN_ARG_INFO_EX(syx_route_simple_construct_arginfo, 0, 0, 3)
+	SYX_ARG_INFO(0, module_name)
+    SYX_ARG_INFO(0, controller_name)
+    SYX_ARG_INFO(0, action_name)
+SYX_END_ARG_INFO()
 /* }}} */
 
 /** {{{ int syx_route_simple_route(syx_route_t *route, syx_request_t *request)

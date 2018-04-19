@@ -24,6 +24,7 @@
 #include "syx_namespace.h"
 #include "syx_exception.h"
 #include "syx_request.h"
+#include "requests/syx_request_http.h"
 
 #include "syx_router.h"
 #include "routes/syx_route_interface.h"
@@ -35,9 +36,9 @@ zend_class_entry *syx_route_supervar_ce;
 
 /** {{{ ARG_INFO
  */
-ZEND_BEGIN_ARG_INFO_EX(syx_route_supervar_construct_arginfo, 0, 0, 1)
-    ZEND_ARG_INFO(0, supervar_name)
-ZEND_END_ARG_INFO()
+SYX_BEGIN_ARG_INFO_EX(syx_route_supervar_construct_arginfo, 0, 0, 1)
+    SYX_ARG_INFO(0, supervar_name)
+SYX_END_ARG_INFO()
 /* }}} */
 
 /** {{{ int syx_route_supervar_route(syx_route_t *route, syx_request_t *request)

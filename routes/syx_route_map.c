@@ -34,10 +34,10 @@ zend_class_entry *syx_route_map_ce;
 
 /** {{{ ARG_INFO
  */
-ZEND_BEGIN_ARG_INFO_EX(syx_route_map_construct_arginfo, 0, 0, 0)
-    ZEND_ARG_INFO(0, controller_prefer)
-	ZEND_ARG_INFO(0, delimiter)
-ZEND_END_ARG_INFO()
+SYX_BEGIN_ARG_INFO_EX(syx_route_map_construct_arginfo, 0, 0, 0)
+    SYX_ARG_INFO(0, controller_prefer)
+	SYX_ARG_INFO(0, delimiter)
+SYX_END_ARG_INFO()
 /* }}} */
 
 syx_route_t * syx_route_map_instance(syx_route_t *this_ptr, zend_bool controller_prefer, zend_string *delim) /* {{{ */{

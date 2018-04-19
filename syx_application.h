@@ -31,6 +31,7 @@ extern zend_class_entry *syx_application_ce;
 
 int syx_application_is_module_name(zend_string *name);
 int syx_application_is_module_name_str(char *name, size_t len);
+int syx_application_parse_option(zval *options);
 
 SYX_STARTUP_FUNCTION(application);
 #endif

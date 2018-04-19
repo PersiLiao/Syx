@@ -22,8 +22,8 @@
 #include "Zend/zend_exceptions.h"
 
 #include "php_syx.h"
-#include "syx_application.h"
 #include "syx_namespace.h"
+#include "syx_application.h"
 #include "syx_exception.h"
 
 zend_class_entry *syx_ce_RuntimeException;

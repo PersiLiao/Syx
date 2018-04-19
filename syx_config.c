@@ -34,13 +34,12 @@ zend_class_entry *syx_config_ce;
 
 /* {{{ ARG_INFO
  */
-ZEND_BEGIN_ARG_INFO_EX(syx_config_void_arginfo, 0, 0, 0)
-ZEND_END_ARG_INFO()
+SYX_BEGIN_ARG_INFO_EX(syx_config_void_arginfo, 0, 0, 0)
+SYX_END_ARG_INFO()
 /* }}} */
 
 syx_config_t *syx_config_instance(syx_config_t *this_ptr, zval *arg1, zval *arg2) /* {{{ */ {
 	syx_config_t *instance;
-
 	if (!arg1) {
 		return NULL;
 	}
