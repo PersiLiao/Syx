@@ -67,6 +67,7 @@
 extern zend_class_entry *syx_dispatcher_ce;
 
 syx_dispatcher_t *syx_dispatcher_instance(syx_dispatcher_t *this_ptr);
+void syx_dispatcher_instance_reset(syx_dispatcher_t *this_ptr);
 syx_response_t *syx_dispatcher_dispatch(syx_dispatcher_t *dispatcher, zval *response_ptr);
 int syx_dispatcher_set_request(syx_dispatcher_t *dispatcher, syx_request_t *request);
 

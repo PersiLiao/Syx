@@ -73,6 +73,7 @@ zend_class_entry* syx_server_get_swoole_server_ce(const char *class_name, size_t
 
 syx_server_t* syx_server_swoole_server_instance(syx_server_t* syx_server_ptr, syx_server_t *syx_swoole_server_ptr, const char *class_name, size_t name_len);
 void syx_server_swoole_server_construct(syx_server_t *syx_swoole_server_o, syx_server_t *syx_server_o);
+void syx_server_destruct(syx_dispatcher_t *dispatcher, syx_request_t *request, syx_response_t *response);
 void syx_server_swoole_on(syx_server_t *syx_swoole_server_o, const char* event_name, size_t name_len, const char* callable_name, size_t callable_name_len);
 
 void syx_server_start(syx_server_t *syx_server_o, syx_server_t *syx_swoole_server_o);

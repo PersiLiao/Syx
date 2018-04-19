@@ -141,6 +141,29 @@ syx_dispatcher_t *syx_dispatcher_instance(syx_dispatcher_t *this_ptr) /* {{{ */ 
 }
 /* }}} */
 
+void syx_dispatcher_instance_reset(syx_dispatcher_t *this_ptr){
+
+    syx_router_t *router, rv = {{0}};
+
+    if(Z_TYPE_P(this_ptr) != IS_OBJECT){
+        syx_trigger_error(SYX_ERR_TYPE_ERROR, "Must be a %s instance", ZSTR_VAL(syx_dispatcher_ce->name));
+    }
+    if(Z_TYPE_P(this_ptr) == IS_OBJECT && !instanceof_function(Z_OBJCE_P(this_ptr), syx_dispatcher_ce)){
+        syx_trigger_error(SYX_ERR_TYPE_ERROR, "Expect a %s instance, %s give", ZSTR_VAL(syx_dispatcher_ce->name), ZSTR_VAL(Z_OBJCE_P(this_ptr)->name));
+    }
+
+    router = syx_router_instance(&rv);
+    zend_update_property(syx_dispatcher_ce, this_ptr, ZEND_STRL(SYX_DISPATCHER_PROPERTY_NAME_ROUTER), router);
+    zval_ptr_dtor(router);
+
+    zend_update_property_str(syx_dispatcher_ce,
+            this_ptr, ZEND_STRL(SYX_DISPATCHER_PROPERTY_NAME_MODULE), SYX_G(default_module));
+    zend_update_property_str(syx_dispatcher_ce,
+            this_ptr, ZEND_STRL(SYX_DISPATCHER_PROPERTY_NAME_CONTROLLER), SYX_G(default_controller));
+    zend_update_property_str(syx_dispatcher_ce,
+            this_ptr, ZEND_STRL(SYX_DISPATCHER_PROPERTY_NAME_ACTION), SYX_G(default_action));
+}
+
 static void syx_dispatcher_get_call_parameters(zend_class_entry *request_ce, syx_request_t *request, zend_function *fptr, zval **params, uint *count) /* {{{ */ {
 	zval          *args, *arg;
 	zend_arg_info *arg_info;
@@ -273,7 +296,7 @@ zend_class_entry *syx_dispatcher_get_controller(zend_string *app_dir, zend_strin
 		class = strpprintf(0, "%s%c%s%c%s%c%s", ZSTR_VAL(SYX_G(namespace)), '\\', ZSTR_VAL(module), '\\',SYX_CONTROLLER_DIRECTORY_NAME , '\\', ZSTR_VAL(controller) );
 
 		class_lowercase = zend_string_tolower(class);
-		
+
 		if ((ce = zend_hash_find_ptr(EG(class_table), class_lowercase)) == NULL) {
 			if (!syx_internal_autoload(ZSTR_VAL(controller), ZSTR_LEN(controller), &directory)) {
 				syx_trigger_error(SYX_ERR_NOTFOUND_CONTROLLER,

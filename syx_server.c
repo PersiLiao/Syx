@@ -27,6 +27,7 @@
 #include "syx_loader.h"
 #include "syx_application.h"
 #include "syx_dispatcher.h"
+#include "syx_router.h"
 #include "syx_bootstrap.h"
 #include "syx_dispatcher.h"
 #include "syx_exception.h"
@@ -108,6 +109,31 @@ void syx_server_swoole_server_construct(syx_server_t *syx_swoole_server_o, syx_s
     zval_ptr_dtor(set_params);
     zval_ptr_dtor(&func_name);
 
+}
+
+void syx_server_destruct(syx_dispatcher_t *dispatcher, syx_request_t *request, syx_response_t *response){
+    syx_router_t *router, rv = {{0}};
+
+    zval_ptr_dtor(request);
+    zval_ptr_dtor(response);
+
+    if(Z_TYPE_P(dispatcher) != IS_OBJECT){
+        syx_trigger_error(SYX_ERR_TYPE_ERROR, "Must be a %s instance", ZSTR_VAL(syx_dispatcher_ce->name));
+    }
+    if(Z_TYPE_P(dispatcher) == IS_OBJECT && !instanceof_function(Z_OBJCE_P(dispatcher), syx_dispatcher_ce)){
+        syx_trigger_error(SYX_ERR_TYPE_ERROR, "Expect a %s instance, %s give", ZSTR_VAL(syx_dispatcher_ce->name), ZSTR_VAL(Z_OBJCE_P(dispatcher)->name));
+    }
+
+    router = syx_router_instance(&rv);
+    zend_update_property(syx_dispatcher_ce, dispatcher, ZEND_STRL(SYX_DISPATCHER_PROPERTY_NAME_ROUTER), router);
+    zval_ptr_dtor(router);
+
+    zend_update_property_str(syx_dispatcher_ce,
+            dispatcher, ZEND_STRL(SYX_DISPATCHER_PROPERTY_NAME_MODULE), SYX_G(default_module));
+    zend_update_property_str(syx_dispatcher_ce,
+            dispatcher, ZEND_STRL(SYX_DISPATCHER_PROPERTY_NAME_CONTROLLER), SYX_G(default_controller));
+    zend_update_property_str(syx_dispatcher_ce,
+            dispatcher, ZEND_STRL(SYX_DISPATCHER_PROPERTY_NAME_ACTION), SYX_G(default_action));
 }
 
 zend_class_entry* syx_server_get_swoole_server_ce(const char *class_name, size_t name_len){
@@ -301,7 +327,7 @@ PHP_METHOD (syx_server, __construct) {
     }
     char *class_name = Z_STRVAL_P(zend_read_property(syx_server_ce, self, ZEND_STRL(SYX_SERVER_PROPERTY_NAME_SERVER_CLASS), 0, NULL));
     syx_server_swoole_server_instance(self, &syx_swoole_server_o, class_name, strlen(class_name));
-
+    (void)syx_dispatcher_instance(&syx_dispatcher);
     zend_update_static_property(syx_server_ce, ZEND_STRL(SYX_SERVER_PROPERTY_NAME_SETTING), &zsetting);
     zval_ptr_dtor(&zsetting);
 }
@@ -348,10 +374,10 @@ PHP_METHOD (syx_server, bootstrap) {
         RETURN_FALSE;
     } else {
         zend_string *func;
-        zval bootstrap, syx_dispatcher={{0}};
+        zval bootstrap, *syx_dispatcher;
 
         object_init_ex(&bootstrap, ce);
-        (void)syx_dispatcher_instance(&syx_dispatcher);
+        syx_dispatcher = syx_dispatcher_instance(NULL);
 
         ZEND_HASH_FOREACH_STR_KEY(&(ce->function_table), func)
                 {
@@ -359,7 +385,7 @@ PHP_METHOD (syx_server, bootstrap) {
                                     sizeof(SYX_BOOTSTRAP_INITFUNC_PREFIX) - 1)) {
                         continue;
                     }
-                    zend_call_method(&bootstrap, ce, NULL, ZSTR_VAL(func), ZSTR_LEN(func), NULL, 1, &syx_dispatcher, NULL);
+                    zend_call_method(&bootstrap, ce, NULL, ZSTR_VAL(func), ZSTR_LEN(func), NULL, 1, syx_dispatcher, NULL);
                     if (UNEXPECTED(EG(exception))) {
                         zval_ptr_dtor(&bootstrap);
                         RETURN_FALSE;
@@ -407,7 +433,7 @@ PHP_METHOD(syx_server, onManagerStart){
 }
 
 PHP_METHOD(syx_server, onWorkerStart){
-    syx_server_t *syx_swoole_server_o = NULL, *syx_server_o, *worker_id, *worker_num, syx_app_o={{0}};
+    syx_server_t *syx_swoole_server_o = NULL, *syx_server_o, *worker_id, *worker_num, *syx_dispatcher, syx_app_o={{0}};
 
     if (zend_parse_parameters_throw(ZEND_NUM_ARGS(), "zz", &syx_swoole_server_o, &worker_id) == FAILURE) {
         return;
@@ -416,7 +442,7 @@ PHP_METHOD(syx_server, onWorkerStart){
     do{
         object_init_ex(&syx_app_o, syx_application_ce);
         zend_update_property(syx_application_ce, &syx_app_o, ZEND_STRL(SYX_APPLICATION_PROPERTY_NAME_CONFIG), zend_read_static_property(syx_server_ce, ZEND_STRL(SYX_SERVER_PROPERTY_NAME_SETTING), 0));
-        zend_update_property_bool(syx_application_ce, &syx_app_o, ZEND_STRL(SYX_APPLICATION_PROPERTY_NAME_RUN), 0);
+        zend_update_property_bool(syx_application_ce, &syx_app_o, ZEND_STRL(SYX_APPLICATION_PROPERTY_NAME_RUN), 1);
         zend_update_property_string(syx_application_ce, &syx_app_o, ZEND_STRL(SYX_APPLICATION_PROPERTY_NAME_ENV), SYX_G(environ_name));
 
         if (Z_TYPE(SYX_G(modules)) == IS_ARRAY) {
@@ -425,6 +451,8 @@ PHP_METHOD(syx_server, onWorkerStart){
             zend_update_property_null(syx_application_ce, &syx_app_o, ZEND_STRL(SYX_APPLICATION_PROPERTY_NAME_MODULES));
         }
         zend_update_static_property(syx_application_ce, ZEND_STRL(SYX_APPLICATION_PROPERTY_NAME_APP), &syx_app_o);
+        syx_dispatcher = syx_dispatcher_instance(NULL);
+        SYX_BOOTSTRAP_EXEC(syx_dispatcher);
     }while(0);
 
     worker_num = syx_server_get_server_set_key(ZEND_STRL("worker_num"));
@@ -435,7 +463,6 @@ PHP_METHOD(syx_server, onWorkerStart){
              SYX_SERVER_PLUGIN_HANDLE(SYX_SERVER_PLUGIN_HOOK_AFTER_WORKERSTART);
          }
     }
-    zend_update_static_property_null(syx_dispatcher_ce, ZEND_STRL(SYX_DISPATCHER_PROPERTY_NAME_INSTANCE));
 }
 
 PHP_METHOD(syx_server, onManagerStop){

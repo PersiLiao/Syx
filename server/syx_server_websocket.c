@@ -76,18 +76,18 @@ PHP_METHOD(syx_server_websocket, onMessage){
     syx_server_t *swoole_server;
     syx_request_t syx_request={{0}}, *swoole_websocket_frame = NULL;
     syx_response_t syx_response = {{0}};
-    syx_dispatcher_t syx_dispatcher = {{0}};
+    syx_dispatcher_t *syx_dispatcher;
 
     if (zend_parse_parameters_throw(ZEND_NUM_ARGS(), "oo", &swoole_server, &swoole_websocket_frame) == FAILURE) {
         return;
     }
     SYX_G(sapi) = SYX_SERVER_TYPE_SWOOLE_WEBSOCKET;
-    (void)syx_dispatcher_instance(&syx_dispatcher);
+    syx_dispatcher = syx_dispatcher_instance(NULL);
     (void)syx_request_swoole_websocket_instance(&syx_request, swoole_websocket_frame);
-    (void)syx_dispatcher_set_request(&syx_dispatcher, &syx_request);
-    SYX_BOOTSTRAP_EXEC(&syx_dispatcher);
+    (void)syx_dispatcher_set_request(syx_dispatcher, &syx_request);
     (void)syx_response_swoole_websocket_instance(&syx_response, swoole_websocket_frame);
-    (void)syx_dispatcher_dispatch(&syx_dispatcher, &syx_response);
+    (void)syx_dispatcher_dispatch(syx_dispatcher, &syx_response);
+    syx_server_destruct(syx_dispatcher, &syx_request, &syx_response);
 }
 
 zend_function_entry syx_server_websocket_methods[] = {

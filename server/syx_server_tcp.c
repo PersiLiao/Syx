@@ -55,18 +55,18 @@ PHP_METHOD(syx_server_tcp, onReceive){
     syx_server_t *swoole_server = NULL, *fd = NULL, *$reactor_id = NULL, *data = NULL;
     syx_request_t syx_request={{0}};
     syx_response_t syx_response = {{0}};
-    syx_dispatcher_t syx_dispatcher={{0}};
+    syx_dispatcher_t *syx_dispatcher = NULL;
 
     if (zend_parse_parameters_throw(ZEND_NUM_ARGS(), "ollz", &swoole_server, &fd, &$reactor_id, &data) == FAILURE) {
         return;
     }
     SYX_G(sapi) = SYX_SERVER_TYPE_SWOOLE_TCP;
-    (void)syx_dispatcher_instance(&syx_dispatcher);
-    SYX_BOOTSTRAP_EXEC(&syx_dispatcher);
+    syx_dispatcher = syx_dispatcher_instance(NULL);
     (void)syx_request_swoole_tcp_instance(&syx_request, fd, $reactor_id, data);
-    (void)syx_dispatcher_set_request(&syx_dispatcher, &syx_request);
+    (void)syx_dispatcher_set_request(syx_dispatcher, &syx_request);
     (void)syx_response_swoole_tcp_instance(&syx_response, fd);
-    (void)syx_dispatcher_dispatch(&syx_dispatcher, &syx_response);
+    (void)syx_dispatcher_dispatch(syx_dispatcher, &syx_response);
+    syx_server_destruct(syx_dispatcher, &syx_request, &syx_response);
 }
 
 /** {{{ syx_server_abstract_methods
