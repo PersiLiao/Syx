@@ -67,9 +67,25 @@ $serv->bootstrap()->start();
 ### application.ini
 
 ```ini
-[product]
-;ini配置支持PHP常量
-application.directory = APP_PATH "/application/"
+[common]
+; 应用根目录
+application.directory = APP_PATH'/application'
+; 自动加载目录
+application.library = APP_PATH'/library'
+
+; 监听IP
+server.host=127.0.0.1
+; 监听端口
+server.port=5566
+; Swoole运行模式
+server.mode=SWOOLE_PROCESS
+; 使用协议，支持|, SWOOLE_SOCK_TCP | SWOOLE_SSL
+server.protocol=SWOOLE_SOCK_TCP
+; set 为swoole server 配置选项
+; 后台运行
+server.set.daemonize=false
+; Worker进程数量配置
+server.set.worker_num=4
 ```
 
 ### Index.php
