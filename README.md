@@ -90,8 +90,8 @@ class Index extends Syx\ControllerAbstract {
 
 ## 特别鸣谢
 
-* 感谢[鸟哥](https://github.com/laruence)为PHP做出的贡献，以及yaf框架代码
-* 感谢[Swoole](https://github.com/swoole)开发组提供的Swoole通信引擎
+* 感谢[@鸟哥(laruence)](https://github.com/laruence)为PHP做出的贡献，以及yaf框架代码
+* 感谢[@Swoole开发组](https://github.com/swoole)提供的Swoole通信引擎
 * 感谢[@韩天峰(Rango)](https://github.com/matyhtf)在开发过程中的指导与支持
 * 感谢[@盘古大叔(pangudashu)](https://github.com/pangudashu/)在开发过程中的帮助
 
