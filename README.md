@@ -1,157 +1,98 @@
-# Syx - base of Yaf 3.0.4 
+![logo](https://avatars3.githubusercontent.com/u/37900031?s=200&v=4)
 
-## Requirement
-- PHP 7.0 +
+## 特性
 
-## Install
-### Compile Syx in Linux
+* 超高性能: 基于PHP7+、Swoole, C扩展框架，超高性能
+* 支持CLI, CGI(FPM), 常驻内存(Swoole)，多种运行模式
+* TCP、UDP、HTTP、WebSocket服务器
+* MVC分层设计
+* 高性能、可扩展路由，支持自定义路由
+* Bootstap、Hook 机制
+* 全局异常处理
+* 异步Task
+* 自定义用户进程
+* RPC服务
+* 代码热更新
+
+## 环境要求
+* PHP 7.0 +
+* Swoole 1.10.3 +
+
+## 安装Swoole、Syx
+
+* 下载Swoole、Syx扩展安装包，然后解压，执行以下命令安装
 ```
 $ /path/to/phpize
 $ ./configure --with-php-config=/path/to/php-config
 $ make && make install
 ```
+* 编辑php.ini
+```
+[swoole]
+extension=swoole.so
 
-## Tutorial
+[syx]
+extension=syx.so
+```
 
-### layout
-A classic Application directory layout:
+## DEMO
+
+### 推荐应用代码结构
 
 ```
-- .htaccess // Rewrite rules
 + public
-  | - index.php // Application entry
-  | + css
-  | + js
-  | + img
+  | - syx
 + conf
-  | - application.ini // Configure
+  | - application.ini // 应用配置文件
 - application/
   - Bootstrap.php // Bootstrap
-  + index // index module
+  + index // index模块，默认为index
     + controller
-      - Index.php // Default controller
-    + model
-      - User.php // Model
-    + view
-      |+ index
-          - index.html // View template for default controller
-    + plugin
-      - System.php
-+ library
+      - Index.php // Index控制器，默认为Index
++ library // 应用类库目录
 ```
 
-### DocumentRoot
-you should set DocumentRoot to application/public, thus only the public folder can be accessed by user
-
-### index.php
-index.php in the public directory is the only way in of the application, you should rewrite all request to it(you can use .htaccess in Apache+php mod)
+### syx文件内容
 
 ```php
+!# /usr/bin/env php
 <?php
 
-define("APPLICATION_PATH",  dirname(dirname(__FILE__)));
+define("APP_PATH",  dirname(__DIR__));
 
-$app  = new Syx\Application(APPLICATION_PATH . "/conf/application.ini");
-$app->bootstrap() //call bootstrap methods defined in Bootstrap.php
-    ->run();
-```
-### Rewrite rules
-
-#### Apache
-
-```conf
-#.htaccess
-RewriteEngine On
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteRule .* index.php
-```
-
-#### Nginx
-
-```
-server {
-  listen ****;
-  server_name  domain.com;
-  root   document_root;
-  index  index.php index.html index.htm;
-
-  if (!-e $request_filename) {
-    rewrite ^/(.*)  /index.php/$1 last;
-  }
-}
-```
-
-#### Lighttpd
-
-```
-$HTTP["host"] =~ "(www.)?domain.com$" {
-  url.rewrite = (
-     "^/(.+)/?$"  => "/index.php/$1",
-  )
-}
+$serv  = new Syx\Server\Http(APP_PATH . "/conf/application.ini");
+$serv->bootstrap()->start();
 ```
 
 ### application.ini
-application.ini is the application config file
 
 ```ini
 [product]
-;CONSTANTS is supported
-application.directory = APPLICATION_PATH "/application/"
+;ini配置支持PHP常量
+application.directory = APP_PATH "/application/"
 ```
-alternatively, you can use a PHP array instead:
 
-```php
-<?php
-$config = array(
-   "application" => array(
-       "directory" => application_path . "/application/",
-       "namespace" => 'app'  // application default namespace
-    ),
-);
-
-$app  = new Syx\Application($config);
-....
-
-```
-### default controller
-In Syx, the default controller is named Index:
+### Index.php
 
 ```php
 <?php
 namespace app\index\controller;
 
 class Index extends Syx\ControllerAbstract {
-   // default action name
+   // 默认Action
    public function indexAction() {
-        $this->getView()->content = "Hello World";
+        // 关闭视图，后期会移除视图
+        Dispatcher::getInstance()->disableView();
+        $this->getResponse()->setBody('hello world');
    }
 }
-
 ```
 
-### view script
-The view script for default controller and default action is in the application/index/view/index/index.html, Syx provides a simple view engineer called "Syx\View\Simple", which supported the view template written by PHP.
+## 特别鸣谢
 
-```php
-<html>
- <head>
-   <title>Hello World</title>
- </head>
- <body>
-   <?php echo $content; ?>
- </body>
-</html>
-```
+* 感谢[鸟哥](https://github.com/laruence)为PHP做出的贡献，以及yaf框架代码
+* 感谢[Swoole](https://github.com/swoole)开发组提供的Swoole通信引擎
+* 感谢[@韩天峰(Rango)](https://github.com/matyhtf)在开发过程中的指导与支持
+* 感谢[@盘古大叔(pangudashu)](https://github.com/pangudashu/)在开发过程中的帮助
 
-## Run the Applicatioin
-  http://www.yourhostname.com/
-
-## Todo list
-
-* Single module
-* Integrated swoole
-
-
-## QQ Group
-QQ Group: 545348293
+## QQ群: 545348293
