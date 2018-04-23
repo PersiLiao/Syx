@@ -232,15 +232,17 @@ static inline void syx_dispatcher_fix_default(syx_dispatcher_t *dispatcher, syx_
 		zend_update_property(syx_request_ce,
 				request, ZEND_STRL(SYX_REQUEST_PROPERTY_NAME_CONTROLLER), default_controller);
 	} else {
-		
-		/*upper controller*/
-		char *p = zend_str_tolower_dup(Z_STRVAL_P(controller), Z_STRLEN_P(controller));
-		*p = toupper(*p);
 
+		/*upper controller*/
+		char p[SYX_REQUEST_PROPERTY_CONTROLLER_MAXLEN];
+		if(Z_STRLEN_P(controller) > SYX_REQUEST_PROPERTY_CONTROLLER_MAXLEN){
+		    syx_trigger_error(SYX_ERR_TYPE_ERROR, "syx controller name max length 128 byte.");
+		}
+		strcpy(p, Z_STRVAL_P(controller));
+		p[0] = toupper(p[0]);
+		fprintf(stdout, "controller is %s\n", p);
 		zend_update_property_stringl(syx_request_ce, request,
 				ZEND_STRL(SYX_REQUEST_PROPERTY_NAME_CONTROLLER), p, Z_STRLEN_P(controller));
-		
-		efree(p);
 	}
 
 	if (Z_TYPE_P(action) != IS_STRING || !Z_STRLEN_P(action)) {
@@ -248,10 +250,10 @@ static inline void syx_dispatcher_fix_default(syx_dispatcher_t *dispatcher, syx_
 				dispatcher, ZEND_STRL(SYX_DISPATCHER_PROPERTY_NAME_ACTION), 1, NULL);
 		zend_update_property(syx_request_ce, request, ZEND_STRL(SYX_REQUEST_PROPERTY_NAME_ACTION), default_action);
 	} else {
-		
+
 		/*lower action*/
 		char *p = zend_str_tolower_dup(Z_STRVAL_P(action), Z_STRLEN_P(action));
-		
+
 		zend_update_property_stringl(syx_request_ce,
 				request, ZEND_STRL(SYX_REQUEST_PROPERTY_NAME_ACTION), p, Z_STRLEN_P(action));
 
