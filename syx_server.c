@@ -33,6 +33,7 @@
 #include "syx_exception.h"
 
 #include "syx_server.h"
+#include "syx_server_conf.h"
 #include "server/syx_server_interface.h"
 #include "server/syx_server_plugin.h"
 #include "server/syx_server_tcp.h"
@@ -40,6 +41,9 @@
 #include "server/syx_server_http.h"
 #include "server/syx_server_websocket.h"
 #include "server/syx_server_rpc.h"
+
+#include "library/console.h"
+#include "syx_command.h"
 
 zend_class_entry *syx_server_ce;
 
@@ -67,6 +71,156 @@ static inline int syx_server_set_proccess_name(syx_zval_t *name){
     }
 }
 
+static inline syx_server_t* syx_server_get_option_host(){
+    syx_zval_t *syx_host;
+    if(SYX_G(serv_conf).host != NULL){
+        ZVAL_STRING(syx_host, SYX_G(serv_conf).host->val);
+    }else if((syx_host = syx_server_get_server_option_key(ZEND_STRL(SYX_SERVER_CONF_PROPERTY_NAME_HOST))) != NULL){
+        return syx_host;
+    }else{
+        ZVAL_STRING(syx_host, SYX_SERVER_DEFAULT_HOST);
+    }
+    return syx_host;
+}
+
+static inline syx_server_t* syx_server_get_option_port(){
+    syx_zval_t *syx_port;
+    if(SYX_G(serv_conf).port != NULL){
+        ZVAL_STRING(syx_port, SYX_G(serv_conf).port->val);
+    }else if((syx_port = syx_server_get_server_option_key(ZEND_STRL(SYX_SERVER_CONF_PROPERTY_NAME_PORT))) != NULL){
+        return syx_port;
+    }else{
+        ZVAL_STRING(syx_port, SYX_SERVER_DEFAULT_PORT);
+    }
+    return syx_port;
+}
+
+static inline syx_server_t* syx_server_get_option_mode(){
+    syx_zval_t *syx_mode;
+    if((syx_mode = syx_server_get_server_option_key(ZEND_STRL("mode")) )!= NULL){
+        return syx_mode;
+    }else{
+        ZVAL_LONG(syx_mode, SYX_MODE_PROCESS);
+    }
+    return syx_mode;
+}
+
+static inline syx_zval_t* syx_server_get_option_ssl(){
+    syx_zval_t *syx_ssl;
+    if(SYX_G(serv_conf).enable_ssl){
+        ZVAL_TRUE(syx_ssl);
+    }else if((syx_ssl = syx_server_get_server_option_key(ZEND_STRL("enablessl"))) != NULL){
+        convert_to_boolean(syx_ssl);
+    }else{
+        ZVAL_FALSE(syx_ssl);
+    }
+    return syx_ssl;
+}
+
+static inline syx_server_t* syx_server_get_option_protocol(){
+    syx_zval_t *zprotocol;
+    zend_long syx_protocol;
+    uint syx_ssl_flag = 0;
+    if(Z_TYPE_P(syx_server_get_option_ssl()) == IS_TRUE){
+        syx_ssl_flag = 1;
+    }
+    if(SYX_G(serv_conf).type != NULL){
+        if(strncasecmp(SYX_G(serv_conf).type->val, "udp", strlen("udp")) == 0){
+            syx_protocol = SYX_SOCK_UDP;
+        }else{
+            syx_protocol = SYX_SOCK_TCP;
+        }
+    }else if((zprotocol = syx_server_get_server_option_key(ZEND_STRL("protocol"))) != NULL){
+        convert_to_long(zprotocol);
+        syx_protocol = Z_LVAL_P(zprotocol);
+    }else{
+        syx_protocol = SYX_SOCK_TCP;
+    }
+    if(syx_ssl_flag){
+        syx_protocol |= SYX_SOCK_SSL;
+    }
+    ZVAL_LONG(zprotocol, syx_protocol);
+    return zprotocol;
+}
+
+static inline syx_zval_t* syx_server_get_option_worker_num(syx_zval_t *worker_num){
+    if(SYX_G(serv_conf).worker_num > 0){
+        ZVAL_LONG(worker_num, SYX_G(serv_conf).worker_num);
+        return worker_num;
+    }else if((worker_num = syx_server_get_server_set_key(ZEND_STRL(SYX_SERVER_CONF_PROPERTY_NAME_WORKER_NUM))) != NULL){
+        return worker_num;
+    }
+    return NULL;
+}
+
+static inline syx_zval_t* syx_server_get_option_task_num(syx_zval_t *task_num){
+    if(SYX_G(serv_conf).task_num > 0){
+        ZVAL_LONG(task_num, SYX_G(serv_conf).task_num);
+    }else if((task_num = syx_server_get_server_option_key(ZEND_STRL(SYX_SERVER_CONF_PROPERTY_NAME_TASK_NUM))) != NULL){
+        return task_num;
+    }else{
+        return NULL;
+    }
+    return task_num;
+}
+
+static inline syx_zval_t* syx_server_get_option_max_request(syx_zval_t *max_request){
+    if(SYX_G(serv_conf).max_request > 0){
+        ZVAL_LONG(max_request, SYX_G(serv_conf).max_request);
+    }else if((max_request = syx_server_get_server_option_key(ZEND_STRL(SYX_SERVER_CONF_PROPERTY_NAME_TASK_NUM))) != NULL){
+        return max_request;
+    }else{
+        return NULL;
+    }
+    return max_request;
+}
+
+static inline syx_zval_t* syx_server_get_option_set(){
+    HashTable *syx_set_ht;
+    syx_zval_t syx_worker_num = {{0}}, syx_max_request = {{0}}, syx_task_num = {{0}};
+    zval *syx_set;
+    syx_set = syx_server_get_server_option_key(ZEND_STRL("set"));
+    php_debug_zval_dump(syx_set, 10);
+    if(syx_set != NULL){
+        syx_set_ht = HASH_OF(syx_set);
+        if(UNEXPECTED(Z_TYPE_P(syx_set) != IS_ARRAY && Z_TYPE_P(syx_set) != IS_OBJECT)){
+            syx_trigger_error(SYX_ERR_STARTUP_FAILED, "Server config must be a array");
+            return NULL;
+        }else{
+            syx_server_get_option_worker_num(&syx_worker_num);
+            if((&syx_worker_num) != NULL){
+                zend_hash_str_update(syx_set_ht, SYX_SERVER_CONF_PROPERTY_NAME_WORKER_NUM, sizeof(SYX_SERVER_CONF_PROPERTY_NAME_WORKER_NUM) - 1, &syx_worker_num);
+            }
+            syx_server_get_option_max_request(&syx_max_request);
+            if(&syx_max_request != NULL){
+                zend_hash_str_update(syx_set_ht, SYX_SERVER_CONF_PROPERTY_NAME_MAX_REQUEST, sizeof(SYX_SERVER_CONF_PROPERTY_NAME_MAX_REQUEST) - 1, &syx_max_request);
+            }
+            syx_server_get_option_task_num(&syx_task_num);
+            if(&syx_task_num != NULL){
+                zend_hash_str_update(syx_set_ht, SYX_SERVER_CONF_PROPERTY_NAME_TASK_NUM, sizeof(SYX_SERVER_CONF_PROPERTY_NAME_TASK_NUM) - 1, &syx_worker_num);
+            }
+            return syx_set;
+        }
+    }else{
+        HashTable *syx_set_arr;
+        array_init(syx_set_arr);
+
+        syx_server_get_option_worker_num(&syx_worker_num);
+        if((&syx_worker_num) != NULL){
+            zend_hash_str_add(syx_set_arr, SYX_SERVER_CONF_PROPERTY_NAME_WORKER_NUM, sizeof(SYX_SERVER_CONF_PROPERTY_NAME_WORKER_NUM) - 1, &syx_worker_num);
+        }
+        syx_server_get_option_max_request(&syx_max_request);
+        if(&syx_max_request != NULL){
+            zend_hash_str_add(syx_set_arr, SYX_SERVER_CONF_PROPERTY_NAME_MAX_REQUEST, sizeof(SYX_SERVER_CONF_PROPERTY_NAME_MAX_REQUEST) - 1, &syx_max_request);
+        }
+        syx_server_get_option_task_num(&syx_task_num);
+        if(&syx_task_num != NULL){
+            zend_hash_str_add(syx_set_arr, SYX_SERVER_CONF_PROPERTY_NAME_TASK_NUM, sizeof(SYX_SERVER_CONF_PROPERTY_NAME_TASK_NUM) - 1, &syx_worker_num);
+        }
+        return syx_set_arr;
+    }
+}
+
 void syx_server_swoole_on(syx_server_t *syx_swoole_server_o, const char* event_name, size_t event_name_len, const char* callable_name, size_t callable_name_len ){
     syx_server_t func_name ={{0}}, retval = {{0}}, params[2];
 
@@ -85,15 +239,15 @@ void syx_server_swoole_server_construct(syx_server_t *syx_swoole_server_o, syx_s
     syx_server_t func_name = {{0}}, retval = {{0}}, retval_x = {{0}};
     syx_server_t *syx_server_set, construct_params[4], set_params[1];
 
-    ZVAL_COPY(&construct_params[0], syx_server_get_server_option_key(ZEND_STRL("host")));
-    ZVAL_COPY(&construct_params[1], syx_server_get_server_option_key(ZEND_STRL("port")));
-    ZVAL_COPY(&construct_params[2], syx_server_get_server_option_key(ZEND_STRL("mode")));
-    ZVAL_COPY(&construct_params[3], syx_server_get_server_option_key(ZEND_STRL("protocol")));
+    ZVAL_COPY(&construct_params[0], syx_server_get_option_host());
+    ZVAL_COPY(&construct_params[1], syx_server_get_option_port());
+    ZVAL_COPY(&construct_params[2], syx_server_get_option_mode());
+    ZVAL_COPY(&construct_params[3], syx_server_get_option_protocol());
 
     ZVAL_STRING(&func_name, "__construct");
     call_user_function(NULL, syx_swoole_server_o, &func_name, &retval, 4, construct_params);
     zval_ptr_dtor(construct_params);
-    syx_server_set = syx_server_get_server_option_key(ZEND_STRL("set"));
+    syx_server_set = syx_server_get_option_set();
     if(UNEXPECTED(syx_server_set == NULL)){
         return;
     }
@@ -290,11 +444,9 @@ PHP_METHOD (syx_server, __construct) {
 #if PHP_SYX_DEBUG
     php_error_docref(NULL, E_STRICT, "Syx server is running in debug mode");
 #endif
-
     if (zend_parse_parameters_throw(ZEND_NUM_ARGS(), "z|z", &setting, &section) == FAILURE) {
         return;
     }
-
     self = getThis();
     if (!section || Z_TYPE_P(section) != IS_STRING || !Z_STRLEN_P(section)) {
         ZVAL_STRING(&zsection, SYX_G(environ_name));
@@ -566,8 +718,8 @@ SYX_STARTUP_FUNCTION(server) {
     syx_server_ce->ce_flags = ZEND_ACC_EXPLICIT_ABSTRACT_CLASS;
 
     zend_declare_property_bool(syx_server_ce, ZEND_STRL(SYX_SERVER_PROPERTY_NAME_DAEMONIZE), 0, ZEND_ACC_PROTECTED);
-    zend_declare_property_null(syx_server_ce, ZEND_STRL(SYX_SERVER_PROPERTY_NAME_APP), ZEND_ACC_STATIC | ZEND_ACC_PROTECTED);
     zend_declare_property_null(syx_server_ce, ZEND_STRL(SYX_SERVER_PROPERTY_NAME_SETTING), ZEND_ACC_STATIC | ZEND_ACC_PROTECTED);
+    zend_declare_property_long(syx_server_ce, ZEND_STRL(SYX_SERVER_PROPERTY_NAME_PROTOCOL), SYX_SOCK_TCP, ZEND_ACC_PROTECTED);
     zend_declare_property_string(syx_server_ce, ZEND_STRL(SYX_SERVER_PROPERTY_NAME_RUN_SCRIPT_FILE), "", ZEND_ACC_PROTECTED);
     zend_declare_property_string(syx_server_ce, ZEND_STRL(SYX_SERVER_PROPERTY_NAME_SERVER_CLASS), SYX_SERVER_CLASS_SWOOLE_SERVER, ZEND_ACC_PROTECTED);
 

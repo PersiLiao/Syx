@@ -91,6 +91,8 @@ if test "$PHP_SYX" != "no"; then
     server/syx_server_udp.c         \
     server/syx_server_websocket.c   \
     syx_server.c                    \
+    library/console.c               \
+    syx_command.c                   \
     syx_session.c,
   $ext_shared)
   PHP_ADD_BUILD_DIR([$ext_builddir/configs])

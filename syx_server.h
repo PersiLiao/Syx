@@ -17,12 +17,44 @@
 #ifndef SYX_SERVER_H_
 #define SYX_SERVER_H_
 
+#define SYX_SERVER_LOGO  \
+"          _____                           _____\n" \
+"         / ___/   __  __   _  __         / ___/  ___    _____ _   __  ___    _____\n"   \
+"         \\__ \\   / / / /  | |/_/         \\__ \\  / _ \\  / ___/| | / / / _ \\  / ___/ \n"  \
+"        ___/ /  / /_/ /  _>  <          ___/ / /  __/ / /    | |/ / /  __/ / /     \n"  \
+"       /____/   \\__, /  /_/|_|         /____/  \\___/ /_/     |___/  \\___/ /_/      \n"  \
+"               /____/\n\n"
+
+
+enum SYX_SERVER_MODE
+{
+    SYX_MODE_BASE          =  1,
+    SYX_MODE_THREAD        =  2,
+    SYX_MODE_PROCESS       =  3,
+    SYX_MODE_SINGLE        =  4,
+};
+
+enum SYX_SOCKER_TYPE
+{
+    SYX_SOCK_TCP          =  1,
+    SYX_SOCK_UDP          =  2,
+    SYX_SOCK_TCP6         =  3,
+    SYX_SOCK_UDP6         =  4,
+    SYX_SOCK_UNIX_DGRAM   =  5,  //unix sock dgram
+    SYX_SOCK_UNIX_STREAM  =  6,  //unix sock stream
+};
+
+#define SYX_SOCK_SSL  (1u << 9)
+
+#define SYX_SERVER_DEFAULT_HOST "127.0.0.1"
+#define SYX_SERVER_DEFAULT_PORT "6688"
+
 #define SYX_SERVER_PROPERTY_NAME_SERVER_CLASS "_server_type"
 #define SYX_SERVER_PROPERTY_NAME_RUN_SCRIPT_FILE "_run_script_file"
 #define SYX_SERVER_PROPERTY_NAME_DAEMONIZE "_daemonize"
 #define SYX_SERVER_PROPERTY_NAME_SETTING "_setting"
-#define SYX_SERVER_PROPERTY_NAME_DISPATCHER "dispatcher"
-#define SYX_SERVER_PROPERTY_NAME_APP "app"
+#define SYX_SERVER_PROPERTY_NAME_PROTOCOL "_protocol"
+#define SYX_SERVER_PROPERTY_NAME_PROTOCOL_VERSION "_protocol_version"
 
 #define SYX_SERVER_CLASS_SWOOLE_SERVER "swoole\\server"
 #define SYX_SERVER_CLASS_SWOOLE_SERVER_HTTP "swoole\\http\\server"
@@ -80,5 +112,6 @@ void syx_server_start(syx_server_t *syx_server_o, syx_server_t *syx_swoole_serve
 syx_plugin_t* syx_server_get_plugins();
 
 extern zend_class_entry *syx_server_ce;
+SYX_STARTUP_FUNCTION(server);
 
 #endif /* SYX_SERVER_H_ */

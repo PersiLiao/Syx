@@ -17,6 +17,7 @@
 #ifndef SYX_CONFIG_H
 #define SYX_CONFIG_H
 
+#define SYX_CONFIG_EXT                   ".ini"
 #define SYX_EXTRACT_FUNC_NAME            "extract"
 #define SYX_CONFIG_PROPERT_NAME          "_config"
 #define SYX_CONFIG_PROPERT_NAME_READONLY "_readonly"

@@ -25,6 +25,7 @@
 #include "ext/standard/info.h"
 #include "ext/standard/php_string.h"
 
+#include "syx_server_conf.h"
 #include "php_syx.h"
 #include "syx_logo.h"
 #include "syx_loader.h"
@@ -44,6 +45,7 @@
 #include "syx_registry.h"
 #include "syx_session.h"
 #include "syx_server.h"
+#include "syx_command.h"
 
 ZEND_DECLARE_MODULE_GLOBALS(syx);
 
@@ -148,6 +150,23 @@ PHP_RINIT_FUNCTION(syx)
 			SYX_ROUTER_DEFAULT_CONTROLLER, sizeof(SYX_ROUTER_DEFAULT_CONTROLLER) - 1, 0);
 	SYX_G(default_action) = zend_string_init(
 			SYX_ROUTER_DEFAULT_ACTION, sizeof(SYX_ROUTER_DEFAULT_ACTION) - 1, 0);
+	SYX_G(serv_conf).action = 0;
+	SYX_G(serv_conf).daemonize = 0;
+	SYX_G(serv_conf).enable_ssl = IS_FALSE;
+	SYX_G(serv_conf).host = NULL;
+	SYX_G(serv_conf).log = NULL;
+	SYX_G(serv_conf).max_request = 0;
+	SYX_G(serv_conf).pid = NULL;
+	SYX_G(serv_conf).port = NULL;
+	SYX_G(serv_conf).task_num = 0;
+	SYX_G(serv_conf).type = NULL;
+	SYX_G(serv_conf).worker_num = 0;
+
+//	SYX_G(app_conf).conf = NULL;
+//	SYX_G(app_conf).directory = NULL;
+//	SYX_G(app_conf).environ = NULL;
+
+	syx_command_parse();
 	return SUCCESS;
 }
 /* }}} */

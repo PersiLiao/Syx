@@ -17,6 +17,8 @@
 #ifndef PHP_SYX_H
 #define PHP_SYX_H
 
+#include "syx_server_conf.h"
+
 extern zend_module_entry syx_module_entry;
 #define phpext_syx_ptr &syx_module_entry
 
@@ -81,7 +83,11 @@ extern PHPAPI void php_debug_zval_dump(zval **struc, int level);
         zend_update_property(Z_OBJCE_P(dest_obj_ptr), dest_obj_ptr, ZEND_STRL(dest_key), ret_##source_key); \
     }while(0) \
 
-
+typedef struct _syx_application_conf_struct{
+    zend_string *conf;
+    zend_string *directory;
+    zend_string *environ;
+}syx_application_conf;
 
 ZEND_BEGIN_MODULE_GLOBALS(syx)
     zend_string *namespace;
@@ -119,6 +125,8 @@ ZEND_BEGIN_MODULE_GLOBALS(syx)
     zval        active_ini_file_section;
     zval        *ini_wanted_section;
     uint        parsing_flag;
+    syx_server_conf serv_conf;
+    syx_application_conf app_conf;
 ZEND_END_MODULE_GLOBALS(syx)
 
 PHP_MINIT_FUNCTION(syx);

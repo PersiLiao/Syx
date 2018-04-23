@@ -128,7 +128,7 @@ PHP_METHOD(syx_config_simple, get) {
 	} else {
 		zval *properties;
 		HashTable *hash;
-		long lval;
+		zend_long lval;
 		double dval;
 
 		properties = zend_read_property(syx_config_simple_ce, getThis(), ZEND_STRL(SYX_CONFIG_PROPERT_NAME), 1, NULL);
@@ -276,7 +276,7 @@ PHP_METHOD(syx_config_simple, current) {
 PHP_METHOD(syx_config_simple, key) {
 	zval *prop;
 	zend_string *string;
-	ulong index;
+	zend_ulong index;
 
 	prop = zend_read_property(syx_config_simple_ce, getThis(), ZEND_STRL(SYX_CONFIG_PROPERT_NAME), 1, NULL);
 	zend_hash_get_current_key(Z_ARRVAL_P(prop), &string, &index);
