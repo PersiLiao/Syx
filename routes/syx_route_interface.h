@@ -31,7 +31,7 @@
 #define SYX_ROUTE_REGEX_DILIMITER  	 '#'
 
 SYX_BEGIN_ARG_INFO_EX(syx_route_route_arginfo, 0, 0, 1)
-	SYX_ARG_INFO(0, request)
+	SYX_ARG_OBJ_INFO(0, request, Syx\\RouteInterface, 0)
 SYX_END_ARG_INFO()
 
 SYX_BEGIN_ARG_INFO_EX(syx_route_assemble_arginfo, 0, 0, 1)
