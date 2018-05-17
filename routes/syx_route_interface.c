@@ -32,6 +32,7 @@
 #include "routes/syx_route_supervar.h"
 #include "routes/syx_route_regex.h"
 #include "routes/syx_route_rewrite.h"
+#include "routes/syx_route_restful.h"
 #include "routes/syx_route_map.h"
 
 zend_class_entry *syx_route_ce;
@@ -67,6 +68,22 @@ syx_route_t * syx_route_instance(syx_route_t *this_ptr, zval *config) {
 		}
 
         instance = syx_route_rewrite_instance(this_ptr, match, def, verify);
+	}else if (Z_STRLEN_P(pzval) == (sizeof("restful") - 1) &&
+	        strncasecmp(Z_STRVAL_P(pzval), "restful", sizeof("restful") - 1) == 0) {
+        if ((match = zend_hash_str_find(Z_ARRVAL_P(config), ZEND_STRL("match"))) == NULL ||
+            Z_TYPE_P(match) != IS_STRING) {
+            return NULL;
+        }
+        if ((def = zend_hash_str_find(Z_ARRVAL_P(config), ZEND_STRL("route"))) == NULL ||
+            Z_TYPE_P(def) != IS_ARRAY) {
+            return NULL;
+        }
+
+        if ((verify = zend_hash_str_find(Z_ARRVAL_P(config), ZEND_STRL("route"))) == NULL ||
+            Z_TYPE_P(verify) != IS_ARRAY) {
+            verify = NULL;
+        }
+        instance = syx_route_restful_instance(this_ptr, match, def, verify);
 	} else if (Z_STRLEN_P(pzval) == (sizeof("regex") - 1) &&
 		strncasecmp(Z_STRVAL_P(pzval), "regex", sizeof("regex") - 1) == 0) {
 		if ((match = zend_hash_str_find(Z_ARRVAL_P(config), ZEND_STRL("match"))) == NULL ||
