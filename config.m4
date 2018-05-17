@@ -73,6 +73,7 @@ if test "$PHP_SYX" != "no"; then
     routes/syx_route_regex.c        \
     routes/syx_route_rewrite.c      \ 
     routes/syx_route_map.c          \
+    routes/syx_route_restful.c      \
     syx_loader.c                    \
     syx_registry.c                  \
     syx_plugin.c                    \

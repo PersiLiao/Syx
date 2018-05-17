@@ -39,7 +39,7 @@ extern zend_module_entry syx_module_entry;
 #define SYX_G(v) (syx_globals.v)
 #endif
 
-#define PHP_SYX_VERSION 					"1.0.0"
+#define PHP_SYX_VERSION 					"1.0.5"
 
 #define SYX_STARTUP_FUNCTION(module)   	ZEND_MINIT_FUNCTION(syx_##module)
 #define SYX_RINIT_FUNCTION(module)		ZEND_RINIT_FUNCTION(syx_##module)

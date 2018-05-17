@@ -35,6 +35,7 @@
 #include "routes/syx_route_supervar.h"
 #include "routes/syx_route_regex.h"
 #include "routes/syx_route_rewrite.h"
+#include "routes/syx_route_restful.h"
 #include "routes/syx_route_map.h"
 
 zend_class_entry *syx_router_ce;
@@ -345,6 +346,7 @@ SYX_STARTUP_FUNCTION(router) {
 	SYX_STARTUP(route_simple);
 	SYX_STARTUP(route_supervar);
 	SYX_STARTUP(route_rewrite);
+	SYX_STARTUP(route_restful);
 	SYX_STARTUP(route_regex);
 	SYX_STARTUP(route_map);
 
