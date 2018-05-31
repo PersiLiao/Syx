@@ -103,6 +103,10 @@ ZEND_BEGIN_ARG_INFO_EX(syx_dispatcher_setaction_arginfo, 0, 0, 1)
     ZEND_ARG_INFO(0, action)
 ZEND_END_ARG_INFO()
 
+ZEND_BEGIN_ARG_INFO_EX(syx_dispatcher_setcontroller_dir_arginfo, 0, 0, 1)
+    ZEND_ARG_INFO(0, directory)
+ZEND_END_ARG_INFO()
+
 /* }}} */
 
 syx_dispatcher_t *syx_dispatcher_instance(syx_dispatcher_t *this_ptr) /* {{{ */ {
@@ -268,19 +272,19 @@ int syx_dispatcher_set_request(syx_dispatcher_t *dispatcher, syx_request_t *requ
 }
 /* }}} */
 
-zend_class_entry *syx_dispatcher_get_controller(zend_string *app_dir, zend_string *module, zend_string *controller) /* {{{ */ {
+zend_class_entry *syx_dispatcher_get_controller(zend_string *app_dir, zend_string *module, zend_string *controller, zval *controller_dir) /* {{{ */ {
 	char *directory;
 	size_t directory_len;
 
 	directory_len = spprintf(&directory, 0,
-			"%s%c%s%c%s", ZSTR_VAL(app_dir), DEFAULT_SLASH,  ZSTR_VAL(module), DEFAULT_SLASH, SYX_CONTROLLER_DIRECTORY_NAME);
+			"%s%c%s%c%s", ZSTR_VAL(app_dir), DEFAULT_SLASH,  ZSTR_VAL(module), DEFAULT_SLASH, Z_STRVAL_P(controller_dir));
 
 	if (EXPECTED(directory_len)) {
 		zend_string *class;
 		zend_string *class_lowercase;
 		zend_class_entry *ce 	= NULL;
 
-		class = strpprintf(0, "%s%c%s%c%s%c%s", ZSTR_VAL(SYX_G(namespace)), '\\', ZSTR_VAL(module), '\\',SYX_CONTROLLER_DIRECTORY_NAME , '\\', ZSTR_VAL(controller) );
+		class = strpprintf(0, "%s%c%s%c%s%c%s", ZSTR_VAL(SYX_G(namespace)), '\\', ZSTR_VAL(module), '\\',Z_STRVAL_P(controller_dir) , '\\', ZSTR_VAL(controller) );
 
 		class_lowercase = zend_string_tolower(class);
 
@@ -464,7 +468,7 @@ int syx_dispatcher_handle(syx_dispatcher_t *dispatcher, syx_request_t *request, 
 		return 0;
 	} else {
 
-		zval *module, *controller, *dmodule, *instantly_flush;
+		zval *module, *controller, *controller_dir, *dmodule, *instantly_flush;
 		zend_class_entry *ce;
 		syx_controller_t *executor;
 		zend_function *fptr;
@@ -489,7 +493,10 @@ int syx_dispatcher_handle(syx_dispatcher_t *dispatcher, syx_request_t *request, 
 			return 0;
 		}
 
-		ce = syx_dispatcher_get_controller(app_dir, Z_STR_P(module), Z_STR_P(controller));
+		controller_dir = zend_read_property(syx_dispatcher_ce,
+		                                    dispatcher, ZEND_STRL(SYX_DISPATCHER_PROPERTY_NAME_CONTORLLER_DIR), 1, NULL);
+
+		ce = syx_dispatcher_get_controller(app_dir, Z_STR_P(module), Z_STR_P(controller), controller_dir);
 
 		if (!ce) {
 			return 0;
@@ -1174,7 +1181,17 @@ PHP_METHOD(syx_dispatcher, setView) {
 }
 /* }}} */
 
+PHP_METHOD(syx_dispatcher, setDefaultControllerDir) {
+    zval *directory;
+    syx_dispatcher_t    *self = getThis();
 
+    if (zend_parse_parameters_throw(ZEND_NUM_ARGS(), "z", &directory) == FAILURE) {
+        return;
+    }
+
+    zend_update_property(syx_dispatcher_ce, self, ZEND_STRL(SYX_DISPATCHER_PROPERTY_NAME_CONTORLLER_DIR), directory);
+    RETURN_ZVAL(self, 1, 0);
+}
 
 /** {{{ proto public Syx_Dispatcher::setDefaultModule(string $name)
 */
@@ -1266,6 +1283,7 @@ zend_function_entry syx_dispatcher_methods[] = {
 	PHP_ME(syx_dispatcher, setDefaultModule,		syx_dispatcher_setmodule_arginfo, 	ZEND_ACC_PUBLIC)
 	PHP_ME(syx_dispatcher, setDefaultController, 		syx_dispatcher_setctrl_arginfo, 	ZEND_ACC_PUBLIC)
 	PHP_ME(syx_dispatcher, setDefaultAction,		syx_dispatcher_setaction_arginfo, 	ZEND_ACC_PUBLIC)
+	PHP_ME(syx_dispatcher, setDefaultControllerDir,        syx_dispatcher_setcontroller_dir_arginfo,     ZEND_ACC_PUBLIC)
 	PHP_ME(syx_dispatcher, returnResponse,			syx_dispatcher_returnresp_arginfo, 	ZEND_ACC_PUBLIC)
 	PHP_ME(syx_dispatcher, autoRender,			syx_dispatcher_autorender_arginfo,	ZEND_ACC_PUBLIC)
 	PHP_ME(syx_dispatcher, flushInstantly,			syx_dispatcher_flush_arginfo, 		ZEND_ACC_PUBLIC)
@@ -1303,6 +1321,7 @@ SYX_STARTUP_FUNCTION(dispatcher) {
 	zend_declare_property_null(syx_dispatcher_ce, ZEND_STRL(SYX_DISPATCHER_PROPERTY_NAME_CONTROLLER), 	ZEND_ACC_PROTECTED);
 	zend_declare_property_null(syx_dispatcher_ce, ZEND_STRL(SYX_DISPATCHER_PROPERTY_NAME_ACTION), 	 	ZEND_ACC_PROTECTED);
 	zend_declare_property_null(syx_dispatcher_ce, ZEND_STRL(SYX_DISPATCHER_PROPERTY_NAME_ARGS), 	 	ZEND_ACC_PROTECTED);
+	zend_declare_property_string(syx_dispatcher_ce, ZEND_STRL(SYX_DISPATCHER_PROPERTY_NAME_CONTORLLER_DIR), SYX_CONTROLLER_DIRECTORY_NAME, ZEND_ACC_PROTECTED);
 
 	return SUCCESS;
 }
